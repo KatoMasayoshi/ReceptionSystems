@@ -1,0 +1,105 @@
+/* Keyboard.css */
+
+.keyboard-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.keyboard-popup {
+  background-color: #f4f4f4;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 90vw;
+  max-width: 500px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.input-box {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.input-box input {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding-right: 2.5rem;
+}
+
+.backspace {
+  position: absolute;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  margin-bottom: 1.2rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.keyboard-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 0.6rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.key {
+  font-size: 1rem;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 50%;
+  background-color: #ffffff;
+  color: #333;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.key:focus{
+  outline: none;
+  box-shadow: none;
+}
+
+.key:hover {
+  transform: scale(1.05);
+  background-color: #eaeaea;
+}
+
+.bottom-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.bottom-buttons .key {
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  font-size: 1rem;
+}
+
+.close-keyboard {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #f44336;
+}

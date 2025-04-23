@@ -1,0 +1,15 @@
+.arrow-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+  
+  .arrow {
+    width: 100px;
+    height: 100px;
+    margin-top: 2rem;
+    margin-left: 2rem;
+    fill: #030104;
+  }
+  

@@ -1,0 +1,57 @@
+.employee-table-wrapper {
+  max-height: 400px; /* 高さはお好みで調整可能 */
+  overflow-y: auto;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  background-color: #fff;
+}
+.employee-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 6px;
+  }
+  
+  .employee-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .create-button {
+    background-color: #0ea5e9;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .employee-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .employee-table th,
+  .employee-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .edit-link {
+    color: #0ea5e9;
+    margin-right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .delete-link {
+    color: #ef4444;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  

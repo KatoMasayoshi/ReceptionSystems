@@ -1,0 +1,59 @@
+/* VisitorLogTable.css */
+
+.visitorlog-container {
+    padding: 1rem;
+  }
+  
+  .visitorlog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .visitorlog-controls {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .edit-btn,
+  .save-btn {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  
+  .edit-btn:hover,
+  .save-btn:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .visitorlog-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  
+  .visitorlog-table th,
+  .visitorlog-table td {
+    border: 1px solid #ddd;
+    padding: 0.8rem;
+    text-align: left;
+  }
+  
+  .visitorlog-table input,
+  .visitorlog-table select {
+    width: 100%;
+    padding: 0.4rem;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  
+  .visitorlog-table select {
+    background-color: #fff;
+  }

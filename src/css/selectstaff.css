@@ -1,0 +1,88 @@
+body {
+    background-color: #fdfdfd;
+  }
+  
+  /* 矢印ボタン */
+  .arrow {
+    width: 10em;
+    height: auto;
+    position: fixed;
+    top: 2em;
+    left: 2em;
+  }
+  
+  /* 戻る矢印ボタンのラッパー */
+  .arrow-button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    top: 1em;
+    left: 4em;
+    z-index: 10;
+  }
+  
+  /* タイトル */
+  h1.selectstaff-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3em;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: bold;
+    font-style: normal;
+  }
+  
+  /* 社員カード全体をグリッドで表示 */
+  .staff-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2.5em;
+    padding: 2em;
+    margin-top: 3em;
+  }
+  
+  /* 1つの社員カード */
+  .staff-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    width: 150px;
+  }
+  
+  .staff-card:hover {
+    transform: scale(1.05);
+  }
+  
+  /* 丸い社員写真 */
+  .staff-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    border: 3px solid #ccc;
+  }
+  
+  /* 社員名 */
+  .staff-name {
+    margin-top: 0.8em;
+    font-weight: bold;
+    font-size: 1rem;
+    text-align: center;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+  
+  /* 部署名 */
+  .staff-department {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 0.2em;
+    text-align: center;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+  

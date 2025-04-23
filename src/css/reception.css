@@ -1,0 +1,192 @@
+/*TODO 画像とテキストが離れすぎたり、近すぎたりするので直す*/
+
+/* ブラウザのフォントのデフォルトを10pxに変える */
+
+
+.reception-page{
+    background-color: #ffffff;
+    min-height: 820px;
+    /*width: 100%; */
+}
+
+
+.reception-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    /* margin-top: 0.5rem; */
+    
+}
+
+/* 社名テキスト */
+.corporate-name{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2em;
+    /* color: #484A5A; */
+    /* height: 20rem; */
+    /* margin-top: 100px; */
+    /* font-size: clamp(2rem, 8vw, 5rem); */
+    
+}
+.logo-icon{
+    width: 10em;
+    height: auto;
+}
+
+
+p {
+    display: flex;
+    justify-content: center;    /*水平方向に中央揃え*/
+    align-items: center;        /*垂直方向に中央揃え*/
+    font-size: clamp(1.5rem, 2vw, 2rem);
+                /*外側の上部の空白*/
+
+
+    /* フォント */
+    font-family:'Noto Sans JP', sans-serif;
+    font-weight:bold;
+    font-style: normal;
+    color: #484A5A;
+    
+}
+
+
+/* ボタンを全体の位置調整 */
+.reception-button{
+    display: flex;
+    justify-content: center;    /*水平方向に中央揃え*/
+    align-items: center;        /*垂直方向に中央揃え*/
+    /* margin-top: 1em; */
+    
+    gap: 8rem;      /*ボタン間の間隔を空ける*/
+    /* height: 70rem; */
+    /* padding-top: 10px; */
+}
+
+/* ボタンの大きさ */
+.reception-button button{
+    width: 20em;     /* 全ボタン共通の幅 */
+    /*height: 5em;     /* 全ボタン共通の高さ */
+    border-radius: 10px;
+    background-color: #F5FEFF;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;     /* 縦方向の中央揃え */
+    justify-content: center; /* 横方向の中央揃え */
+    text-align: center;
+    margin-top: 6rem;
+    padding: 2rem;
+}
+
+/* 担当者呼び出し */
+.callstaff-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction:column;
+}
+
+/* 配送受付 */
+.delivery-button{
+    display: flex;
+    flex-direction:column;
+    /* font-size: clamp(1rem, 2.5vw, 1rem); */
+}
+
+/* 総合受付 */
+.general-button{
+    display: flex;
+    flex-direction: column; /*縦方向に並べる*/   
+}
+
+/* ドア画像 */
+.door-icon{
+    width: 10em;
+    height: auto;
+    /* margin-top: 10rem; */
+
+}
+
+/* 「担当者呼び出し」テキスト */
+.callstaff-text{
+    font-size: clamp(1rem, 0.818rem + 0.91vw, 1.5rem);
+    font-weight: bold;
+    /*text-shadow: 1px 2px 3px #808080;       /*影をつける*/
+    margin-top: 2rem;
+    font-family:'Noto Sans JP', sans-serif;
+    font-style: normal;
+    color: #484A5A;
+}
+
+/* 配送画像 */
+.delivery-icon{
+    width: 10em;
+    height: auto;
+
+    /* margin-top: 10rem; */
+}
+
+/* 「配送受付」テキスト */
+.delivery-text{
+    font-size: clamp(1rem, 0.818rem + 0.91vw, 1.5rem);
+    font-weight: bold;
+    /*text-shadow: 1px 2px 3px #808080;       /*影をつける*/
+    margin-top: 1rem;
+    font-family:'Noto Sans JP', sans-serif;
+    font-style: normal;
+    color: #484A5A;
+}
+
+
+
+/* 総合受付画像 */
+.general-icon{
+    width: 10em;
+    height: auto;
+    /* margin-top: 10rem; */
+}
+
+/* 「総合受付」テキスト */
+.general-text{
+    font-size: clamp(1rem, 0.818rem + 0.91vw, 1.5rem);
+    font-weight: bold;
+    /*text-shadow: 1px 2px 3px #808080;       /*影をつける*/
+    margin-top: 2rem;
+    font-family:'Noto Sans JP', sans-serif;
+    font-style: normal;
+    color: #484A5A;
+}
+
+/* PCで見るときのサイズ */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    /* ipad用 */
+        /* ボタンを全体の位置調整 */
+    .reception-button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5em;      /*ボタン間の間隔を空ける*/
+    }
+
+    /* ボタンの大きさ */
+    .reception-button button{
+
+        width: 15em;     /* 全ボタン共通の幅 */
+        height: 18em;     /* 全ボタン共通の高さ */
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    
+    
+}

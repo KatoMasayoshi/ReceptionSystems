@@ -1,0 +1,91 @@
+
+body, #root {
+    margin: 0;
+    padding: 0;
+}
+
+.login-page{
+    background-color: #2E2940;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.center-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* padding-top: 5%; */
+    text-align: center;
+}
+
+.titlename {
+    font-size: clamp(2rem, 10vw, 10rem);
+    margin-top: 0.3em;
+    color: #fff;
+    font-weight: bold;
+}
+
+label {
+    font-size: clamp(2rem, 4vw, 4rem);
+    color: #fff;
+    font-weight: bold;
+}
+
+.label-id {
+    text-align: center;
+    padding-right: 47%;
+}
+
+.label-pw {
+    text-align: center;
+    padding-right: 34%;
+    padding-bottom: 5px;
+}
+
+.textbox {
+    width: 50%;
+    height: 3em;
+}
+
+button {
+    border-radius: 50px;
+    margin-top: 1em;
+}
+
+.submitbutton {
+    margin-top: 0.5em;
+    font-size: 1.5em;
+    width: 14em;
+    height: 4em;
+}
+
+/* エラーメッセージ */
+.error-message {
+    color: #ef4444;
+    background-color: #fee2e2;
+    border: 1px solid #fca5a5;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+    font-weight: bold;
+    transition: opacity 0.3s ease-in-out;
+    text-align: center;
+  }
+  
+  /* フェードインアニメーション */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
