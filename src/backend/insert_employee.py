@@ -2,8 +2,8 @@ import mysql.connector
 
 # DB接続設定
 config = {
-    'user': 'root',
-    'password': 'Gion182533Koryo1g2d3d',  # ← ご自身の環境に合わせて変更
+    'user': 'apiuser',
+    'password': 'A-proud200709',  # ← ご自身の環境に合わせて変更
     'host': 'localhost',
     'database': 'reception_system',
     'port': 3306

@@ -1,24 +1,86 @@
 // src/pages/Reception.jsx
-import React from 'react';
+import React, { useEffect, useRef} from 'react';
 import '../css/reception.css';
 import { useNavigate } from 'react-router-dom';
 // ✅ motionを読み込み
 import { motion } from 'motion/react';
+// import background from "../image/Blue_Mountain_Water_Close_Up_original_1485080.jpg"
 
 import { playClickSound } from '../utils/sound';
 
 const Reception = () => {
   const navigate = useNavigate();
+  const timerRef = useRef(null)
 
   const handleCallStaff = () => {
     playClickSound();
     navigate('/select-staff');
   };
 
-  const handleCallStaffs = () => {
-    playClickSound();
-    navigate('/seliveryandInfocalling');
+  const handleCallStaffs = async (type) => {
+    const endpoint = type === "delivery"
+      ? "/api/notify/delivery"
+      : "/api/notify/general";
+  
+    try {
+      const response = await fetch(`${endpoint}`, {
+        method: "POST",
+      });
+  
+      if (response.ok) {
+        // ✅ 通知が成功したら「呼び出し中」画面へ遷移！
+        navigate("/seliveryandInfocalling", { state: { type } }); // 受付種類を渡すこともできるよ
+      } else {
+        alert("通知に失敗しました！");
+      }
+    } catch (error) {
+      console.error("通知エラー:", error);
+      alert("通知エラーが発生しました！");
+    }
   };
+
+  useEffect(() => {
+    resetTimer(); // 初回もタイマー開始
+
+    const resetEvents = ['click', 'toouchstart']; // 画面タッチまたはクリックでリセット
+    resetEvents.forEach(event =>
+      window.addEventListener(event, resetTimer)
+    );
+    
+    return () => {
+      // クリーンアップ
+      resetEvents.forEach(event => 
+        window.removeEventListener(event, resetTimer)
+      );
+      clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const resetTimer = () => {
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      navigate('/standby'); // 10秒操作がなかったら待機画面ヘ
+    }, 10000);
+  };
+
+  
+
+  // const handleCallStaffs = () => {
+  //   playClickSound();
+  //   navigate('/seliveryandInfocalling');
+  // };
+
+  // const handleDelivery = () => {
+  //   fetch("http://localhost:8000/api/notify/delivery", { method: "POST" })
+  //   .then(() => alert("通知を送信しました！"))
+  //   .catch(() => alert("通知に失敗しました..."));
+  // };
+
+  // const handleGeneral = () => {
+  //   fetch("http://localhost:8000/api/notify/general", { method: "POST" })
+  //     .then(() => alert("通知を送信しました！"))
+  //     .catch(() => alert("通知に失敗しました…"));
+  // };
 
   return (
     // ✅ motion.div で画面全体をアニメーション付きでラップ
@@ -29,8 +91,9 @@ const Reception = () => {
       exit={{ x: '-100%', opacity: 0 }}    // 終了時は左へ
       transition={{ duration: 0.5, ease: 'easeInOut' }}        // アニメーションの速さ
     >
+      {/* <div style={{background: `url(${background})`}}/> */}
       <h1 className="corporate-name">
-        <img src="/image/ロゴタイプ2.png" alt="ロゴ" className="logo-icon" />
+        <img src="/image/ロゴタイプ3.png" alt="ロゴ" className="logo-icon" />
       </h1>
 
       <p className="fisrttext">いらっしゃいませ、ご用件を選んでください</p>
@@ -38,19 +101,19 @@ const Reception = () => {
       <div className="reception-button">
         {/* 担当者呼び出し */}
         <button type="button" className="callstaff-button" onClick={handleCallStaff}>
-          <img src="/image/door_調整3(484A5A).png" alt="担当者" className="door-icon" />
+          <img src="/image/担当者.png" alt="担当者" className="door-icon" />
           <div className="callstaff-text">担当者呼出し</div>
         </button>
 
         {/* 配送受付 */}
-        <button type="button" className="delivery-button" onClick={handleCallStaffs}>
-          <img src="/image/配送アイコン2(cccccc).png" alt="配送" className="delivery-icon" />
+        <button type="button" className="delivery-button" onClick={() => handleCallStaffs("delivery")} >
+          <img src="/image/配達.png" alt="配送" className="delivery-icon" />
           <div className="delivery-text">配送受付</div>
         </button>
 
         {/* 総合受付 */}
-        <button type="button" className="general-button" onClick={handleCallStaffs}>
-          <img src="/image/326650.png" alt="総合受付" className="general-icon" />
+        <button type="button" className="general-button" onClick={() => handleCallStaffs("general")}>
+          <img src="/image/総合受付.png" alt="総合受付" className="general-icon" />
           <div className="general-text">総合受付</div>
         </button>
       </div>

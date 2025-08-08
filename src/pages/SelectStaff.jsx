@@ -1,39 +1,35 @@
-// src/pages/SelectStaff.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/selectstaff.css';
 import BackArrow from "../components/common/BackArrow";
 import { motion } from 'motion/react';
 import { playClickSound } from '../utils/sound';
-
-// ✅ 社員情報：画像パス・名前・部署を含む配列
-const employees = [
-  { name: '尾川 健斗', department: '営業部', image: '/image/ogawa.jpg' },
-  { name: '船古 陸斗', department: '営業部', image: '/image/funako.jpg' },
-  { name: '阿部 圭祐', department: 'ITソリューション事業部', image: '/image/abe.jpg' },
-  { name: '古瀬 康浩', department: 'ITソリューション事業部', image: '/image/furuse.jpg' },
-  { name: '村上 優太', department: 'ITソリューション事業部', image: '/image/murakami.jpg' },
-  { name: '加藤 優凱', department: 'ITソリューション事業部', image: '/image/kato.jpg' },
-];
+import axios from 'axios';
 
 const SelectStaff = () => {
   const navigate = useNavigate();
+  const [employees, setEmployees] = useState([]); // 🔄 社員情報をここに取得
+
+  // 🔄 ページ表示時にAPIから社員データを取得
+  useEffect(() => {
+    axios.get('/api/employees')
+      .then(res => setEmployees(res.data))
+      .catch(err => console.error('社員情報取得エラー:', err));
+  }, []);
 
   const handleBack = () => {
     playClickSound();
     navigate('/reception');
   };
 
-  const handleStaffClick = (name) => {
+  const handleStaffClick = (emp) => {
     playClickSound();
-    navigate('/input', { state: { staffName: name } });
+    navigate('/input', { state: { staffName: emp.name, staffImage: emp.image_path } });
   };
 
   return (
     <>
-      {/* ✅ 戻るボタンはアニメーション外に出すことでズレを防止 */}
       <BackArrow onClick={handleBack} />
-
       <motion.div
         className="select-staff-page"
         initial={{ x: '100%', opacity: 0 }}
@@ -43,11 +39,10 @@ const SelectStaff = () => {
       >
         <h1 className='selectstaff-title'>担当者を選択してください</h1>
 
-        {/* ✅ 社員カードをグリッド表示 */}
         <div className="staff-grid">
           {employees.map((emp, index) => (
-            <div key={index} className="staff-card" onClick={() => handleStaffClick(emp.name)}>
-              <img src={emp.image} alt={emp.name} className="staff-image" />
+            <div key={index} className="staff-card" onClick={() => handleStaffClick(emp)}>
+              <img src={emp.image_path} alt={emp.name} className="select_staff-image" />
               <p className="staff-name">{emp.name}</p>
               <p className="staff-department">{emp.department}</p>
             </div>

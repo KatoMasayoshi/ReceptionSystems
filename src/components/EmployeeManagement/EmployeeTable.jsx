@@ -15,7 +15,7 @@ const EmployeeTable = () => {
   }, []);
 
   const fetchEmployees = () => {
-    axios.get('http://localhost:8000/api/employees')
+    axios.get('/api/employees')
       .then((res) => setEmployees(res.data))
       .catch((err) => console.error(err));
   };
@@ -30,30 +30,22 @@ const EmployeeTable = () => {
   };
 
   const handleSaveClick = async (id) => {
-    try {
-      // 名前と部署の更新
-      await axios.put(`http://localhost:8000/api/employees/${id}`, {
+    try{
+      await axios.put(`/api/employees/${id}`, {
         name: editFormData.name,
-        department: editFormData.department
+        department: editFormData.department,
+        image_path: editFormData.image_path
       });
-  
-      // 画像があれば画像パスも更新
-      if (editFormData.imageFile) {
-        const imagePath = `/image/${editFormData.imageFile.name}`;
-        await axios.put(`http://localhost:8000/api/employees/${id}/select-image`, {
-          image_path: imagePath
-        });
-      }
-  
+
       fetchEmployees();
       setEditingId(null);
-    } catch (err) {
+    } catch(err){
       console.error("保存エラー:", err);
     }
   };
 
   const handleDeleteClick = (id) => {
-    axios.delete(`http://localhost:8000/api/employees/${id}`)
+    axios.delete(`/api/employees/${id}`)
       .then(() => {
         setEmployees(employees.filter(emp => emp.id !== id));
       });
@@ -82,7 +74,7 @@ const EmployeeTable = () => {
   };
 
   const handleAddEmployee = () => {
-    axios.post('http://localhost:8000/api/employees', newEmployee)
+    axios.post('/api/employees', newEmployee)
       .then(() => {
         fetchEmployees();
         setNewEmployee({ name: '', department: '', image_path: '' });

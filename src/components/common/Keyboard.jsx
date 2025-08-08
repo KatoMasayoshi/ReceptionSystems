@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import "./css/Keyboard.css"; // スタイルを別ファイルで管理
+// import { ReactComponent as ArrowIcon } from '../../image/arrow-right3.svg';
+import Arrow from "@elsdoerfer/react-arrow";
 
 const katakanaKeys = [
   "ワ", "ラ", "ヤ", "マ", "ハ", "ナ", "タ", "サ", "カ", "ア",
-  "ヲ", "リ", " ", "ミ", "ヒ", "ニ", "チ", "シ", "キ", "イ",
-  "ン", "ル", "ユ", "ム", "フ", "ヌ", "ス", "ツ", "ク", "ウ",
-  "(株)", "レ", " ", "メ", "ヘ", "ネ", "テ", "セ", "ケ", "エ",
-  "", "ロ", "ヨ", "モ", "ホ", "ノ", "ト", "ソ", "コ", "オ"
+  "ヲ", "リ", "ユ", "ミ", "ヒ", "ニ", "チ", "シ", "キ", "イ",
+  "ン", "ル", "ヨ", "ム", "フ", "ヌ", "ツ", "ス", "ク", "ウ",
+  "(株)", "レ", "", "メ", "ヘ", "ネ", "テ", "セ", "ケ", "エ",
+  "", "ロ", "ー", "モ", "ホ", "ノ", "ト", "ソ", "コ", "オ"
 ];
 
 const symbolKeys = [
@@ -17,7 +19,7 @@ const symbolKeys = [
   "@", "#", "$", "%", "&", "*", "-", "_", "!", "?"
 ];
 
-const Keyboard = ({ value, onInput, onClose }) => {
+const Keyboard = ({ value, onInput, onClose, placeholder="入力してください" }) => {
   const [mode, setMode] = useState("katakana");
 
   const handleKeyClick = (key) => {
@@ -41,12 +43,19 @@ const Keyboard = ({ value, onInput, onClose }) => {
   return (
     <div className="keyboard-popup-overlay">
       <div className="keyboard-popup">
+      <button className="close-arrow-button" onClick={onClose}>
+        ←
+      </button>        
         <div className="input-box">
-          <input type="text" value={value} readOnly />
+          
+          <input type="text" 
+          className="company-input" 
+          value={value} 
+          readOnly 
+          placeholder={placeholder} 
+          />
           <button className="backspace" onClick={handleBackspace}>
-            <span role="img" aria-label="削除">
-              ✖️
-            </span>
+            <img src="/image/backspace2.png" alt="削除" className="backspace-icon" />
           </button>
         </div>
 
@@ -63,14 +72,24 @@ const Keyboard = ({ value, onInput, onClose }) => {
         </div>
 
         <div className="bottom-buttons">
-          <button className="key" onClick={handleSpace}>
+          <button className="key-space" onClick={handleSpace}>
             スペース
           </button>
-          <button className="key" onClick={toggleMode}>
+          <button className="key-kanaeisu" onClick={toggleMode}>
             {mode === "katakana" ? "英数記号" : "カタカナ"}
           </button>
-          <button className="key" onClick={onClose}>
-            閉じる
+          <button className="close-keyboard" onClick={onClose}>
+          <Arrow className="arrow-icon"
+              angle={90}
+              length={5.5}
+              color='#ABE1FA'
+              lineWidth={0.4}
+              arrowHeadFilled={false}
+              style={{
+                width: '250px'
+              }}
+            />
+            {/* <img src= "/image/arrow-right.svg" alt="閉じる" className="arrow-icon" /> */}
           </button>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './VisitorLogTable.css';
+import './VisitorLogs.css'
 
 const VisitorLogTable = ({ isEditing, setIsEditing }) => {
   // DBから取得した来訪ログ一覧（state）
@@ -8,7 +9,7 @@ const VisitorLogTable = ({ isEditing, setIsEditing }) => {
 
   // 最初の1回だけ実行される処理（DBから一覧取得）
   useEffect(() => {
-    axios.get('http://localhost:8000/api/visitor-logs')
+    axios.get('/api/visitor-logs')
       .then((res) => setVisitorLogs(res.data))
       .catch((err) => console.error('取得失敗:', err));
   }, []);
@@ -24,7 +25,7 @@ const VisitorLogTable = ({ isEditing, setIsEditing }) => {
   // 保存ボタンを押したときにDBに変更を送信する処理
   const handleSave = () => {
     const updateRequests = visitorLogs.map(log =>
-      axios.put(`http://localhost:8000/api/visitor-logs/${log.id}`, {
+      axios.put(`/api/visitor-logs/${log.id}`, {
         check_in: log.check_in,
         check_out: log.check_out,
         company: log.company,
@@ -40,7 +41,7 @@ const VisitorLogTable = ({ isEditing, setIsEditing }) => {
         alert('保存が完了しました！');
         setIsEditing(false);
         // 最新データ取得
-        return axios.get('http://localhost:8000/api/visitor-logs');
+        return axios.get('/api/visitor-logs');
       })
       .then((res) => setVisitorLogs(res.data))
       .catch((err) => {

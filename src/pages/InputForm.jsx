@@ -12,6 +12,7 @@ const InputForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const selectedStaff = location.state?.staffName || '未選択';
+  const selectedImage = location.state?.staffImage || '/image/default.png';
 
   const [formData, setFormData] = useState({
     company: '',
@@ -19,7 +20,6 @@ const InputForm = () => {
     purpose: '新規打ち合わせ',
     persons: ''
   });
-  const [showModal, setShowModal] = useState(false);
   const [keyboardTarget, setKeyboardTarget] = useState(null); // 自作キーボードの対象フィールド
 
   // 入力変更処理（来訪目的変更時の特別処理を含む）
@@ -49,26 +49,52 @@ const InputForm = () => {
   const handleSubmit = (e) => {
     playClickSound();
     e.preventDefault();
-    setShowModal(true);
   };
 
   const handleCall = () => {
     playClickSound();
-    axios.post('http://192.168.1.3:8000/api/visitors', formData)
+
+    // 🔍 バリデーション：必須項目チェック
+    if (!formData.company || !formData.name || !formData.purpose) {
+      alert("⚠️ 必須項目がすべて入力されているか確認してください！");
+      return; // ⛔ 処理を中断
+    }    
+    // DBに来訪者情報を登録
+    axios.post('/api/visitors', formData)
       .then(() => {
-        navigate('/calling', { state: { staffName: selectedStaff } });
+        // 登録が成功したら、LINE通知用にデータを整形して送信！
+        const notifyData = {
+          employee_name: selectedStaff,       // 担当者名（事前に選ばれている）
+          purpose: formData.purpose,          // 来訪目的
+          company: formData.company,          // 会社名
+          name: formData.name,                // 来訪者の氏名
+          companions: formData.persons        // 同行人数
+        };
+
+        axios.post('/api/notify', notifyData)
+          .then(() => {
+            // 通知成功したら「呼び出し中」画面へ遷移
+            navigate('/calling', { state: { staffName: selectedStaff, staffImage: selectedImage } });
+          })
+          .catch((err) => {
+            console.error('LINE通知に失敗しました:', err);
+            alert("通知に送信に失敗しました");
+          });
       })
       .catch((err) => {
         console.error('来訪者の登録に失敗しました:', err);
       });
+
+
   };
+
 
   const handleBack = () => {
     navigate('/select-staff');
   };
 
   return (
-    <>
+    <div className='input-screen'>
       <form onSubmit={handleSubmit}>
         <h2 className="header-text">来訪目的・会社名・氏名を記入してください</h2>
 
@@ -80,7 +106,7 @@ const InputForm = () => {
             <p className="Form-Item-Label isMsg">
               <span className="Form-Item-Label-Required">必須</span>来訪目的
             </p>
-            <select id="purpose" value={formData.purpose} onChange={handleChange}>
+            <select id="purpose" value={formData.purpose} onChange={handleChange} className='select-purpose'>
               <option value="新規打ち合わせ">新規打ち合わせ</option>
               <option value="既存打ち合わせ">既存打ち合わせ</option>
               <option value="面接">面接</option>
@@ -90,7 +116,7 @@ const InputForm = () => {
           {/* ▼ 会社名（面接の場合は自動入力＆入力不可） */}
           <div className="Form-Item">
             <p className="Form-Item-Label">
-              <span className="Form-Item-Label-Required">必須</span>会社名
+              <span className="Form-Item-Label-Required-company">必須</span>会社名
             </p>
             <input
               type="text"
@@ -111,7 +137,7 @@ const InputForm = () => {
           {/* ▼ 氏名 */}
           <div className="Form-Item">
             <p className="Form-Item-Label">
-              <span className="Form-Item-Label-Required">必須</span>氏名
+              <span className="Form-Item-Label-Required-name">必須</span>氏　名
             </p>
             <input
               type="text"
@@ -131,19 +157,20 @@ const InputForm = () => {
             <p className="Form-Item-Label">
               <span className="Form-Item-Label-Optional">任意</span>同行人数
             </p>
-            <input
-              type="text"
+            <select
               id="persons"
               className="Form-Item-Input"
-              placeholder="例）1人"
-              autoComplete="off"
               value={formData.persons}
-              onClick={() => setKeyboardTarget('persons')}
-              readOnly
-            />
+              onChange={handleChange}
+            >
+              <option value="0人">0人</option>
+              <option value="1人">1人</option>
+              <option value="2人">2人</option>
+              <option value="3人">3人</option>
+            </select>
           </div>
 
-          <button className="Form-Btn" type="submit">確認</button>
+          <button className="Form-Btn" type="button" onClick={handleCall}>呼び出し</button>
         </div>
       </form>
 
@@ -153,25 +180,16 @@ const InputForm = () => {
           value={formData[keyboardTarget]}
           onInput={handleKeyboardInput}
           onClose={() => setKeyboardTarget(null)}
+          placeholder={
+            keyboardTarget === 'company'
+              ? 'あなたの会社名'
+              : keyboardTarget === 'name'
+                ? 'あなたのお名前'
+                : '入力してください'
+          }
         />
       )}
-
-      {/* ▼ 確認モーダル */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content-confirmation">
-            <h3>確認画面</h3>
-            <p><strong>担当者 :</strong>{selectedStaff}</p>
-            <p><strong>会社名：</strong>{formData.company}</p>
-            <p><strong>氏名：</strong>{formData.name}</p>
-            <p><strong>来訪目的：</strong>{formData.purpose}</p>
-            <p><strong>同行人数：</strong>{formData.persons || 'なし'}</p>
-            <button onClick={() => setShowModal(false)}>戻　る</button>
-            <button onClick={handleCall}>呼び出し</button>
-          </div>
-        </div>
-      )}
-    </>
+    </div>
   );
 };
 

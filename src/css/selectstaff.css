@@ -1,5 +1,9 @@
 body {
-    background-color: #fdfdfd;
+    /* background-color: #fdfdfd; */
+    /* background-image: url('../image/Dramatic_Sunset_Skies_And_Cloudscape_Of_Rich_Colour_Sky._Sunset_Cloud_Background_original_3012936.jpg'); */
+    /*background-size: cover;      /* 🔥画像全体が表示されるように！ */
+    /* background-position: center;
+    background-repeat: no-repeat; */
   }
   
   /* 矢印ボタン */
@@ -59,7 +63,7 @@ body {
   }
   
   /* 丸い社員写真 */
-  .staff-image {
+  .select_staff-image {
     width: 120px;
     height: 120px;
     border-radius: 50%;

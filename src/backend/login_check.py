@@ -8,7 +8,7 @@ router = APIRouter()
 # DB設定
 config = {
     'user': 'root',
-    'password': 'Gion182533Koryo1g2d3d',
+    'password': 'A-proud200709',
     'host': 'localhost',
     'database': 'reception_system',
     'port': 3306
@@ -27,7 +27,7 @@ def is_valid_password(password: str) -> bool:
         re.search(r'[^A-Za-z0-9]', password)
     )
 
-@router.post("/api/login")
+@router.post("/login")
 def login(data: LoginRequest):
     if not is_valid_password(data.password):
         raise HTTPException(status_code=400, detail="パスワードの要件を満たしていません")

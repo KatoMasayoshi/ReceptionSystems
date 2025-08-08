@@ -1,13 +1,16 @@
-from fastapi import FastAPI, HTTPException, Body
+from fastapi import FastAPI, HTTPException, Body, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from datetime import datetime, timedelta
 import mysql.connector
-from login_check import router as login_router
 from account_api import router as acounnt_router
+from notify_api import router as notify_router
+import re
 import os
 
 app = FastAPI()
+
+app.include_router(notify_router)
 
 # ======= CORS設定 =======
 app.add_middleware(
@@ -20,8 +23,8 @@ app.add_middleware(
 
 # ======= MySQL接続情報 =======
 config = {
-    'user': 'root',
-    'password': 'Gion182533Koryo1g2d3d',
+    'user': 'apiuser',
+    'password': 'A-proud200709',
     'host': 'localhost',
     'database': 'reception_system',
     'port': 3306
@@ -39,8 +42,61 @@ class Employee(BaseModel):
     department: str
     image_path: str = None  # ✅ 新たに追加（例："/image/kato.jpg"）
 
+router = APIRouter()
+
+# DB設定
+config = {
+    'user': 'apiuser',
+    'password': 'A-proud200709',
+    'host': 'localhost',
+    'database': 'reception_system',
+    'port': 3306
+}
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+def is_valid_password(password: str) -> bool:
+    return (
+        len(password) >= 8 and
+        re.search(r'[A-Z]', password) and
+        re.search(r'[a-z]', password) and
+        re.search(r'[0-9]', password) and
+        re.search(r'[^A-Za-z0-9]', password)
+    )
+
+#@router.post("/login")
+@app.post("/login")
+def login(data: LoginRequest):
+    if not is_valid_password(data.password):
+        raise HTTPException(status_code=400, detail="パスワードの要件を満たしていません")
+
+    try:
+        conn = mysql.connector.connect(**config)
+        cursor = conn.cursor(dictionary=True)
+
+        query = "SELECT * FROM users WHERE username = %s AND password = %s"
+        cursor.execute(query, (data.username, data.password))
+        user = cursor.fetchone()
+
+        if not user:
+            raise HTTPException(status_code=401, detail="IDまたはパスワードが間違っています")
+        if user['username'].startswith("admin"):
+            return {"role": "admin", "message": "管理画面へ遷移"}
+        else:
+            return {"role": "user", "message": "受付画面へ遷移"}
+
+    except mysql.connector.Error as err:
+        raise HTTPException(status_code=500, detail=str(err))
+    finally:
+        if conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
 # ======= 来訪者登録 =======
-@app.post("/api/visitors")
+@app.post("/visitors")
 def add_visitor(visitor: Visitor):
     try:
         conn = mysql.connector.connect(**config)
@@ -67,11 +123,9 @@ def add_visitor(visitor: Visitor):
     finally:
         if conn.is_connected():
             cursor.close()
-            conn.close()
 
-# ======= 来訪ログ取得・更新 =======
-@app.get("/api/visitor-logs")
-def get_visitor_logs():
+@app.get("/visitors-logs")
+def get_visitors():
     try:
         conn = mysql.connector.connect(**config)
         cursor = conn.cursor(dictionary=True)
@@ -84,7 +138,7 @@ def get_visitor_logs():
             cursor.close()
             conn.close()
 
-@app.put("/api/visitor-logs/{visitor_id}")
+@app.put("/visitor-logs/{visitor_id}")
 def update_visitor_log(visitor_id: int, log: dict):
     try:
         conn = mysql.connector.connect(**config)
@@ -118,7 +172,7 @@ def update_visitor_log(visitor_id: int, log: dict):
             conn.close()
 
 # ======= 社員情報取得・追加・更新・削除 =======
-@app.get("/api/employees")
+@app.get("/employees")
 def get_employees():
     try:
         conn = mysql.connector.connect(**config)
@@ -132,7 +186,7 @@ def get_employees():
             cursor.close()
             conn.close()
 
-@app.post("/api/employees")
+@app.post("/employees")
 def add_employee(employee: Employee):
     try:
         conn = mysql.connector.connect(**config)
@@ -151,18 +205,17 @@ def add_employee(employee: Employee):
 # ==============================
 # 社員画像パスだけを保存する（画像ファイルは保存しない）
 # ==============================
-@app.put("/api/employees/{employee_id}/select-image")
-def set_employee_image_path(employee_id: int, data: dict = Body(...)):
-    image_path = data.get("image_path")
-    if not image_path:
-        raise HTTPException(status_code=400, detail="image_path が必要です")
-
+@app.put("/employees/{employee_id}")
+def update_employee(employee_id: int, employee: Employee):
     try:
         conn = mysql.connector.connect(**config)
         cursor = conn.cursor()
-        cursor.execute("UPDATE employees SET image_path = %s WHERE id = %s", (image_path, employee_id))
+
+        query = "UPDATE employees SET name = %s, department = %s, image_path = %s WHERE id = %s"
+        cursor.execute(query, (employee.name, employee.department, employee.image_path, employee_id))
         conn.commit()
-        return {"message": "画像パスをDBに保存しました", "image_path": image_path}
+
+        return {"message": "Employee updated"}
     except mysql.connector.Error as err:
         raise HTTPException(status_code=500, detail=str(err))
     finally:
@@ -172,7 +225,7 @@ def set_employee_image_path(employee_id: int, data: dict = Body(...)):
 
 
 
-@app.delete("/api/employees/{employee_id}")
+@app.delete("/employees/{employee_id}")
 def delete_employee(employee_id: int):
     try:
         conn = mysql.connector.connect(**config)
@@ -190,5 +243,4 @@ def delete_employee(employee_id: int):
             conn.close()
 
 # ======= 外部ルーター読み込み =======
-app.include_router(login_router)
 app.include_router(acounnt_router)

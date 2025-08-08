@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #ffffff;
+    background-image: url('../image/gradation.png');
     color: #2E2940;
     font-family: 'Noto Sans JP', sans-serif;
   }
@@ -12,10 +12,52 @@
   .calling-message {
     color: #2E2940;
     margin-top: 2rem;
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
+
+  .staff-image{
+    width: 20rem;
+    height: 20rem;
+    margin-bottom: 3rem;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    border: 3px solid #ccc;
+  }
+
+  /* 呼び出し画面の読み込みバー */
+
+.loading-bar-container {
+  width: 500px;          /* 🔥 太くしたいならここで調整 */
+  height: 10px;           /* 🔥 高さもここで変更できるよ */
+  background-color: #f2f2f2;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.loading-bar {
+  width: 50px;
+  height: 100%;
+  background-color: #2589d0;
+  animation: slide-bar 1.8s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+/* アニメーション本体 */
+@keyframes slide-bar {
+  0% {
+    transform: translateX(-80px); /* バーの幅分、左から始まる */
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(500px); /* コンテナの右端を超えて消える */
+    opacity: 1;
+  }
+}
   
-  .loader {
+  /* .loader {
     color: #2E2940;
     font-size: 90px;
     text-indent: -9999em;
@@ -71,5 +113,5 @@
     100% {
       transform: rotate(360deg);
     }
-  }
+  } */
   

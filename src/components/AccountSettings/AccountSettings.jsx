@@ -18,7 +18,7 @@ const AccountSettings = () => {
   }, []);
 
   const fetchUsers = () => {
-    axios.get('http://localhost:8000/api/users')
+    axios.get('/api/users')
       .then(res => setUsers(res.data))
       .catch(err => console.error('ユーザー取得エラー:', err));
   };
@@ -49,7 +49,7 @@ const AccountSettings = () => {
       return;
     }
 
-    axios.post('http://localhost:8000/api/users', formData)
+    axios.post('/api/users', formData)
       .then(() => {
         setFormData({ username: '', password: '' });
         setIsModalOpen(false);
@@ -69,7 +69,7 @@ const AccountSettings = () => {
   };
 
   const handleSave = (id) => {
-    axios.put(`http://localhost:8000/api/users/${id}`, editFormData)
+    axios.put(`/api/users/${id}`, editFormData)
       .then(() => {
         setEditUserId(null);
         fetchUsers();
@@ -78,7 +78,7 @@ const AccountSettings = () => {
   };
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:8000/api/users/${id}`)
+    axios.delete(`/api/users/${id}`)
       .then(() => fetchUsers())
       .catch(err => console.error('削除エラー:', err));
   };

@@ -1,27 +1,92 @@
 .wait-screen{
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-family: sans-serif;
+    background-image: url('../image/gradation.png');
+    /*background-size: cover;      /* 🔥画像全体が表示されるように！ */
+     /* background-position: center;   */
+     /* background-repeat: no-repeat;     */
 }
 
 .animated-header {
     font-size: 1.3rem;
     font-weight: bold;
     color: #484A5A;
-    margin-top: 2rem;
+    position: relative;
+    top: -8rem;
     opacity: 0.3;
     /* animation: pulse 10s infinite; */
   }
     
-  /* @keyframes pulse {
-    0% { transform: scale(1); opacity: 1; color: #333; }
-    50% { transform: scale(1.5); opacity: 0.7; color: #007BFF; }
-    100% { transform: scale(1); opacity: 1; color: #333; }
-  } */
 
 .wait-message{
-    margin-top: 10rem;
+    margin-top: 1rem;
     font-weight: 500;
+    position: relative;
+
+    top: -5rem;
+}
+
+.check-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  top: 15rem;
+  /* height: 100vh; */
+  /* background: #f9f9f9; */
+}
+
+.checkmark {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  top: -12rem;
+  stroke: 484A5A;
+  stroke-width: 4;
+  stroke-miterlimit: 10;
+  fill: none;
+  animation: drawCircle 0.6s ease-out 0.4s forwards; /* ← 0.4秒後に描き始める */
+}
+
+.checkmark-circle {
+  stroke-dasharray: 157;
+  stroke-dashoffset: 157;
+  animation: drawCircle 0.6s ease-out forwards;
+}
+
+.checkmark-check {
+  stroke: white;
+  stroke-dasharray: 36;
+  stroke-dashoffset: 36;
+  animation: drawCheck 0.4s ease-out 0.8s forwards; /* ← 0.8s 遅れて開始！ */
+}
+.greeting-phrase{
+  position: relative;
+  top: 8rem;
+}
+
+@keyframes drawCircle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes drawCheck {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes scaleCheck {
+  0% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

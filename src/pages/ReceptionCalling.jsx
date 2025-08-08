@@ -8,18 +8,23 @@ const Calling = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const staffName = location.state?.staffName || '担当者';
+    const staffImage = location.state?.staffImage || "/image/default.png";
   
     useEffect(() => {
       const timer = setTimeout(() => {
         navigate('/waitscreen');
-      }, 3000);
+      }, 5000);
   
       return () => clearTimeout(timer);
     }, [navigate]);
   
     return (
       <div className="calling-page">
-        <div className="loader">Loading...</div>
+        <img src={staffImage} alt={staffName} className="staff-image" />
+        {/* ローディングバーを div で置き換え */}
+        <div className="loading-bar-container">
+          <div className="loading-bar"></div>
+        </div>
         <p className="calling-message">{staffName}を呼び出しています...</p>
       </div>
     );

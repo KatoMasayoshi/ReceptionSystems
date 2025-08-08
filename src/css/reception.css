@@ -6,6 +6,11 @@
 .reception-page{
     background-color: #ffffff;
     min-height: 820px;
+    /* 背景を画像にする */
+    /* background-image: url('../image/25616.jpg'); */
+    /*background-size: cover;      /* 🔥画像全体が表示されるように！ */
+    /* background-position: center;  */
+    /* background-repeat: no-repeat;
     /*width: 100%; */
 }
 
@@ -42,7 +47,7 @@ p {
     display: flex;
     justify-content: center;    /*水平方向に中央揃え*/
     align-items: center;        /*垂直方向に中央揃え*/
-    font-size: clamp(1.5rem, 2vw, 2rem);
+    font-size:1.2rem;
                 /*外側の上部の空白*/
 
 
@@ -62,17 +67,18 @@ p {
     align-items: center;        /*垂直方向に中央揃え*/
     /* margin-top: 1em; */
     
-    gap: 8rem;      /*ボタン間の間隔を空ける*/
+    gap: 5.5rem;      /*ボタン間の間隔を空ける*/
     /* height: 70rem; */
     /* padding-top: 10px; */
 }
 
 /* ボタンの大きさ */
 .reception-button button{
-    width: 20em;     /* 全ボタン共通の幅 */
-    /*height: 5em;     /* 全ボタン共通の高さ */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    width: 23em;     /* 全ボタン共通の幅 */
+    height: 23em;     /* 全ボタン共通の高さ */
     border-radius: 10px;
-    background-color: #F5FEFF;
+    background-color: #fbffff;
     border: none;
     cursor: pointer;
     display: flex;
@@ -106,7 +112,7 @@ p {
 
 /* ドア画像 */
 .door-icon{
-    width: 10em;
+    width: 15em;
     height: auto;
     /* margin-top: 10rem; */
 
@@ -117,7 +123,7 @@ p {
     font-size: clamp(1rem, 0.818rem + 0.91vw, 1.5rem);
     font-weight: bold;
     /*text-shadow: 1px 2px 3px #808080;       /*影をつける*/
-    margin-top: 2rem;
+    margin-top: -0.1rem;
     font-family:'Noto Sans JP', sans-serif;
     font-style: normal;
     color: #484A5A;
@@ -125,7 +131,7 @@ p {
 
 /* 配送画像 */
 .delivery-icon{
-    width: 10em;
+    width: 15em;
     height: auto;
 
     /* margin-top: 10rem; */
@@ -136,7 +142,7 @@ p {
     font-size: clamp(1rem, 0.818rem + 0.91vw, 1.5rem);
     font-weight: bold;
     /*text-shadow: 1px 2px 3px #808080;       /*影をつける*/
-    margin-top: 1rem;
+    margin-top: 0.2rem;
     font-family:'Noto Sans JP', sans-serif;
     font-style: normal;
     color: #484A5A;
@@ -146,7 +152,7 @@ p {
 
 /* 総合受付画像 */
 .general-icon{
-    width: 10em;
+    width: 14em;
     height: auto;
     /* margin-top: 10rem; */
 }
@@ -156,7 +162,7 @@ p {
     font-size: clamp(1rem, 0.818rem + 0.91vw, 1.5rem);
     font-weight: bold;
     /*text-shadow: 1px 2px 3px #808080;       /*影をつける*/
-    margin-top: 2rem;
+    margin-top: 1.0rem;
     font-family:'Noto Sans JP', sans-serif;
     font-style: normal;
     color: #484A5A;

@@ -6,8 +6,8 @@ router = APIRouter()
 
 # DB設定
 config = {
-    'user': 'root',
-    'password': 'Gion182533Koryo1g2d3d',
+    'user': 'apiuser',
+    'password': 'A-proud200709',
     'host': 'localhost',
     'database': 'reception_system',
     'port': 3306
@@ -17,7 +17,7 @@ class User(BaseModel):
     username: str
     password: str
 
-@router.get("/api/users")
+@router.get("/users")
 def get_users():
     try:
         conn = mysql.connector.connect(**config)
@@ -28,7 +28,7 @@ def get_users():
         cursor.close()
         conn.close()
 
-@router.post("/api/users")
+@router.post("/users")
 def add_user(user: User):
     try:
         conn = mysql.connector.connect(**config)
@@ -43,7 +43,7 @@ def add_user(user: User):
         cursor.close()
         conn.close()
 
-@router.put("/api/users/{user_id}")
+@router.put("/users/{user_id}")
 def update_user(user_id: int, user: User):
     try:
         conn = mysql.connector.connect(**config)
@@ -56,7 +56,7 @@ def update_user(user_id: int, user: User):
         cursor.close()
         conn.close()
 
-@router.delete("/api/users/{user_id}")
+@router.delete("/users/{user_id}")
 def delete_user(user_id: int):
     try:
         conn = mysql.connector.connect(**config)

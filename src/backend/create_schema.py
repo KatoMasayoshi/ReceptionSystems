@@ -3,8 +3,8 @@ import mysql.connector
 
 # 接続情報を設定（必要に応じて編集）
 config = {
-    'user': 'root',
-    'password': 'Gion182533Koryo1g2d3d',
+    'user': 'apiuser',
+    'password': 'A-proud200709',
     'host': 'localhost',
     'port': 3306,
 }

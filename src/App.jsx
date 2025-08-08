@@ -13,6 +13,7 @@ import DeliveryAndInfoCalling from './pages/DeliveryAndInfoCalling';
 import AdminDashboard from './components/AdminDashboard/AdminDashboard';
 import Keyboard from './components/common/Keyboard';
 import WaitScreen from './pages/WaitScreen';
+import StandbyScreen from './pages/StandbyScreen';
 
 // ✅ アニメーション付きでルーティングをレンダリングするためのラッパーコンポーネント
 const AnimatedRoutes = () => {
@@ -51,6 +52,7 @@ const AnimatedRoutes = () => {
         <Route path="/seliveryandInfocalling" element={<DeliveryAndInfoCalling />} />
         <Route path="/keyboard" element={<Keyboard />} />
         <Route path="/waitscreen" element={<WaitScreen />} />
+        <Route path="/standby" element={<StandbyScreen />} />
       </Routes>
     </AnimatePresence>
   );
