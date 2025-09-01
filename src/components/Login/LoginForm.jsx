@@ -21,7 +21,10 @@ const LoginForm = () => {
       };
 
       // FastAPI に POST リクエストを送信
-      const response = await axios.post('/api/login', payload)
+      // const response = await axios.post('/api/login', payload)
+      // 開発環境
+      const response = await axios.post('http://192.168.1.3:8000/login', payload)
+
 
 
       // レスポンス内容に応じて画面遷移

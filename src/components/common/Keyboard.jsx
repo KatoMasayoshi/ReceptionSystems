@@ -19,6 +19,18 @@ const symbolKeys = [
   "@", "#", "$", "%", "&", "*", "-", "_", "!", "?"
 ];
 
+// 追加: 濁点/半濁点の変換マップ
+const dakutenMap = {
+  "ウ":"ヴ","カ":"ガ","キ":"ギ","ク":"グ","ケ":"ゲ","コ":"ゴ",
+  "サ":"ザ","シ":"ジ","ス":"ズ","セ":"ゼ","ソ":"ゾ",
+  "タ":"ダ","チ":"ヂ","ツ":"ヅ","テ":"デ","ト":"ド",
+  "ハ":"バ","ヒ":"ビ","フ":"ブ","ヘ":"ベ","ホ":"ボ",
+};
+
+const handakutenMap = {
+  "ハ":"パ","ヒ":"ピ","フ":"プ","ヘ":"ペ","ホ":"ポ",
+};
+
 const Keyboard = ({ value, onInput, onClose, placeholder="入力してください" }) => {
   const [mode, setMode] = useState("katakana");
 
@@ -39,6 +51,59 @@ const Keyboard = ({ value, onInput, onClose, placeholder="入力してくださ�
   };
 
   const keysToShow = mode === "katakana" ? katakanaKeys : symbolKeys;
+
+  // 逆引き（元に戻す用）
+const revDakutenMap   = Object.fromEntries(Object.entries(dakutenMap).map(([k,v]) => [v, k]));
+const revHandakutenMap= Object.fromEntries(Object.entries(handakutenMap).map(([k,v]) => [v, k]));
+
+const applyDakuten = () => {
+  if (!value) return;
+  const last = value.slice(-1);
+  const head = value.slice(0, -1);
+
+  // 既に濁点 → ベースへ戻す
+  if (revDakutenMap[last]) {
+    onInput(head + revDakutenMap[last]);
+    return;
+  }
+  // 半濁点 → ベースに戻して濁点へ（パ→バ など）
+  if (revHandakutenMap[last]) {
+    const base = revHandakutenMap[last]; // ハ系のベース
+    onInput(head + (dakutenMap[base] ?? last));
+    return;
+  }
+  // ベース → 濁点付与
+  if (dakutenMap[last]) {
+    onInput(head + dakutenMap[last]);
+  }
+};
+
+const applyHandakuten = () => {
+  if (!value) return;
+  const last = value.slice(-1);
+  const head = value.slice(0, -1);
+
+  // 既に半濁点 → ベースへ戻す
+  if (revHandakutenMap[last]) {
+    onInput(head + revHandakutenMap[last]);
+    return;
+  }
+  // 濁点 → ベースに戻して半濁点へ（バ→パ など）
+  if (revDakutenMap[last]) {
+    const base = revDakutenMap[last]; // ハ系のベース or その他
+    if (handakutenMap[base]) {
+      onInput(head + handakutenMap[base]);
+      return;
+    }
+    // ハ行以外（例: ズ等）は半濁点対象外 → そのまま戻すだけ
+    onInput(head + base);
+    return;
+  }
+  // ベース → 半濁点（ハ行のみ）
+  if (handakutenMap[last]) {
+    onInput(head + handakutenMap[last]);
+  }
+};
 
   return (
     <div className="keyboard-popup-overlay">
@@ -75,6 +140,15 @@ const Keyboard = ({ value, onInput, onClose, placeholder="入力してくださ�
           <button className="key-space" onClick={handleSpace}>
             スペース
           </button>
+
+          {/* 追加: 濁点/半濁点 */}
+          <button className="key-dakuten" onClick={applyDakuten}>
+            ゛
+            </button>
+          <button className="key-handakuten" onClick={applyHandakuten}>
+            ゜
+            </button>
+            {/* カナ英数字変更ボタン */}
           <button className="key-kanaeisu" onClick={toggleMode}>
             {mode === "katakana" ? "英数記号" : "カタカナ"}
           </button>

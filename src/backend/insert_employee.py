@@ -1,13 +1,25 @@
 import mysql.connector
 
 # DB接続設定
+# config = {
+#     'user': 'apiuser',
+#     'password': 'A-proud200709',  # ← ご自身の環境に合わせて変更
+#     'host': 'localhost',
+#     'database': 'reception_system',
+#     'port': 3306
+# }
+
+
+# DB設定
+# ローカルテスト
 config = {
-    'user': 'apiuser',
-    'password': 'A-proud200709',  # ← ご自身の環境に合わせて変更
+    'user': 'AdminUser',
+    'password': 'V7fnCxi3',
     'host': 'localhost',
     'database': 'reception_system',
     'port': 3306
 }
+
 
 # 登録するデータ
 new_employee = {

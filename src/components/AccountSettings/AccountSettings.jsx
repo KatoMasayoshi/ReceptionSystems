@@ -18,7 +18,8 @@ const AccountSettings = () => {
   }, []);
 
   const fetchUsers = () => {
-    axios.get('/api/users')
+    // axios.get('/api/users')
+    axios.get('http://192.168.1.3:8000/users')
       .then(res => setUsers(res.data))
       .catch(err => console.error('ユーザー取得エラー:', err));
   };

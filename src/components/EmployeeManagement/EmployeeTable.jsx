@@ -15,8 +15,9 @@ const EmployeeTable = () => {
   }, []);
 
   const fetchEmployees = () => {
-    axios.get('/api/employees')
-      .then((res) => setEmployees(res.data))
+    // axios.get('/api/employees')
+    axios.get('http://192.168.1.3:8000/employees')
+    .then((res) => setEmployees(res.data))
       .catch((err) => console.error(err));
   };
 
@@ -31,7 +32,8 @@ const EmployeeTable = () => {
 
   const handleSaveClick = async (id) => {
     try{
-      await axios.put(`/api/employees/${id}`, {
+      // await axios.put(`/api/employees/${id}`, {
+      await axios.put(`http://192.168.1.3:8000/employees/${id}`, {
         name: editFormData.name,
         department: editFormData.department,
         image_path: editFormData.image_path
@@ -44,8 +46,12 @@ const EmployeeTable = () => {
     }
   };
 
+
+  // 削除確認で'はい'が押されたとき
   const handleDeleteClick = (id) => {
-    axios.delete(`/api/employees/${id}`)
+    // axios.delete(`/api/employees/${id}`)
+    console.log(id)
+    axios.delete(`http://192.168.1.3:8000/employees/${id}`)
       .then(() => {
         setEmployees(employees.filter(emp => emp.id !== id));
       });
@@ -74,13 +80,25 @@ const EmployeeTable = () => {
   };
 
   const handleAddEmployee = () => {
-    axios.post('/api/employees', newEmployee)
+    // axios.post('/api/employees', newEmployee)
+    axios.post('http://192.168.1.3:8000/employees', newEmployee)
       .then(() => {
         fetchEmployees();
         setNewEmployee({ name: '', department: '', image_path: '' });
         setShowModal(false);
       });
   };
+
+  // 削除ボタン押下時に確認メッセージを出す
+  const deletecheck = (id) => {
+    let checkSaveFlg = window.confirm('削除しますか？');
+    if(checkSaveFlg){
+      handleDeleteClick(id)
+    } else{
+      // 何もしない
+      return;
+    }
+  }
 
   return (
     <div className="employee-table-container">
@@ -173,7 +191,7 @@ const EmployeeTable = () => {
                   ) : (
                     <>
                       <button onClick={() => handleEditClick(emp)}>編集</button>
-                      <button onClick={() => handleDeleteClick(emp.id)}>削除</button>
+                      <button className='delete-button' onClick={() => deletecheck(emp.id)}>削除</button>
                     </>
                   )}
                 </td>

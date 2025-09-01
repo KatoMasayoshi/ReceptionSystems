@@ -12,7 +12,8 @@ const SelectStaff = () => {
 
   // 🔄 ページ表示時にAPIから社員データを取得
   useEffect(() => {
-    axios.get('/api/employees')
+    // axios.get('/api/employees')
+    axios.get('http://192.168.1.3:8000/employees') // <= 開発環境
       .then(res => setEmployees(res.data))
       .catch(err => console.error('社員情報取得エラー:', err));
   }, []);

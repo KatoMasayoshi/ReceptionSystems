@@ -6,9 +6,19 @@ import re
 router = APIRouter()
 
 # DB設定
+# config = {
+#     'user': 'root',
+#     'password': 'A-proud200709',
+#     'host': 'localhost',
+#     'database': 'reception_system',
+#     'port': 3306
+# }
+
+# DB設定
+# ローカルテスト
 config = {
-    'user': 'root',
-    'password': 'A-proud200709',
+    'user': 'AdminUser',
+    'password': 'V7fnCxi3',
     'host': 'localhost',
     'database': 'reception_system',
     'port': 3306

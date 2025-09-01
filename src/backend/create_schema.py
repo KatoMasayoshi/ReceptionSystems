@@ -2,11 +2,21 @@
 import mysql.connector
 
 # 接続情報を設定（必要に応じて編集）
+# config = {
+#     'user': 'apiuser',
+#     'password': 'A-proud200709',
+#     'host': 'localhost',
+#     'port': 3306,
+# }
+
+# DB設定
+# ローカルテスト
 config = {
-    'user': 'apiuser',
-    'password': 'A-proud200709',
+    'user': 'AdminUser',
+    'password': 'V7fnCxi3',
     'host': 'localhost',
-    'port': 3306,
+    'database': 'reception_system',
+    'port': 3306
 }
 
 # DB作成・テーブル作成スクリプト
