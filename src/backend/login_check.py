@@ -1,66 +1,67 @@
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-import mysql.connector
-import re
+# from fastapi import APIRouter, HTTPException
+# from pydantic import BaseModel
+# import mysql.connector
+# import re
 
-router = APIRouter()
+# router = APIRouter()
 
-# DB設定
+# # DB設定
+# # config = {
+# #     'user': 'root',
+# #     'password': 'A-proud200709',
+# #     'host': 'localhost',
+# #     'database': 'reception_system',
+# #     'port': 3306
+# # }
+
+# # DB設定
+# # ローカルテスト
 # config = {
-#     'user': 'root',
-#     'password': 'A-proud200709',
+#     'user': 'AdminUser',
+#     'password': 'V7fnCxi3',
 #     'host': 'localhost',
 #     'database': 'reception_system',
 #     'port': 3306
 # }
 
-# DB設定
-# ローカルテスト
-config = {
-    'user': 'AdminUser',
-    'password': 'V7fnCxi3',
-    'host': 'localhost',
-    'database': 'reception_system',
-    'port': 3306
-}
+# class LoginRequest(BaseModel):
+#     username: str
+#     password: str
+# def is_valid_password(password: str) -> bool:
+#     return (
+#         len(password) >= 8 and
+#         re.search(r'[A-Z]', password) and
+#         re.search(r'[a-z]', password) and
+#         re.search(r'[0-9]', password) and
+#         re.search(r'[^A-Za-z0-9]', password)
+#     )
 
-class LoginRequest(BaseModel):
-    username: str
-    password: str
+# @router.post("/login")
+# def login(data: LoginRequest):
+#     if not is_valid_password(data.password):
+#         raise HTTPException(status_code=400, detail="パスワードの要件を満たしていません")
 
-def is_valid_password(password: str) -> bool:
-    return (
-        len(password) >= 8 and
-        re.search(r'[A-Z]', password) and
-        re.search(r'[a-z]', password) and
-        re.search(r'[0-9]', password) and
-        re.search(r'[^A-Za-z0-9]', password)
-    )
+#     try:
+#         conn = mysql.connector.connect(**config)
+#         cursor = conn.cursor(dictionary=True)
 
-@router.post("/login")
-def login(data: LoginRequest):
-    if not is_valid_password(data.password):
-        raise HTTPException(status_code=400, detail="パスワードの要件を満たしていません")
+#         query = "SELECT * FROM users WHERE username = %s AND password = %s"
+#         cursor.execute(query, (data.username, data.password))
+#         user = cursor.fetchone()
 
-    try:
-        conn = mysql.connector.connect(**config)
-        cursor = conn.cursor(dictionary=True)
+#         if not user:
+#             raise HTTPException(status_code=401, detail="IDまたはパスワードが間違っています")
+        
+#         role = user["role"]
+        
+#         if role == ("admin"):
+#             return {"role": "admin", "message": "管理画面へ遷移"}
+#         else:
+#             return {"role": "staff", "message": "受付画面へ遷移"}
 
-        query = "SELECT * FROM users WHERE username = %s AND password = %s"
-        cursor.execute(query, (data.username, data.password))
-        user = cursor.fetchone()
-
-        if not user:
-            raise HTTPException(status_code=401, detail="IDまたはパスワードが間違っています")
-
-        if user['username'].startswith("admin"):
-            return {"role": "admin", "message": "管理画面へ遷移"}
-        else:
-            return {"role": "user", "message": "受付画面へ遷移"}
-
-    except mysql.connector.Error as err:
-        raise HTTPException(status_code=500, detail=str(err))
-    finally:
-        if conn.is_connected():
-            cursor.close()
-            conn.close()
+#     except mysql.connector.Error as err:
+#         raise HTTPException(status_code=500, detail=str(err))
+#     finally:
+#         if conn.is_connected():
+#             cursor.close()
+#             conn.close()

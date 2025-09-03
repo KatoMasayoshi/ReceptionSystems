@@ -1,6 +1,6 @@
 // App.jsx
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import React, { Children } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate} from 'react-router-dom';
 import { AnimatePresence, motion } from "motion/react"; // ✅ motion.dev の API を使用
 
 // ✅ 各ページコンポーネント
@@ -14,10 +14,21 @@ import AdminDashboard from './components/AdminDashboard/AdminDashboard';
 import Keyboard from './components/common/Keyboard';
 import WaitScreen from './pages/WaitScreen';
 import StandbyScreen from './pages/StandbyScreen';
+import VisitorLogs from './components/VisitorLog/VisitorLogs';
+import EmployeeTable from './components/EmployeeManagement/EmployeeTable';
+import EmployeeManagement from './components/EmployeeManagement/EmployeeManagement';
+import AccountSettings from './components/AccountSettings/AccountSettings';
+import VisitorLogTable from './components/VisitorLog/VisitorLogTable';
 
 // ✅ アニメーション付きでルーティングをレンダリングするためのラッパーコンポーネント
 const AnimatedRoutes = () => {
   const location = useLocation();
+
+  const RequireAdmin = ({children}) => {
+    const role = localStorage.getItem("role");
+    console.log(role);
+    return role === "admin" ? children : <Navigate to = "/" replace />;
+  }
 
   return (
     <AnimatePresence initial={false}>
@@ -33,7 +44,12 @@ const AnimatedRoutes = () => {
           </motion.div>
         } />
 
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin" element={<AdminDashboard />} >
+          <Route index element={<Navigate to="visitors" replace />} />
+          <Route path="visitors/*" element={<VisitorLogTable />} />
+          <Route path="employees/*" element={<EmployeeTable />} />
+          <Route path="accounts/*" element={<RequireAdmin><AccountSettings /> </RequireAdmin>} />
+        </Route>
 
         <Route path="/reception" element={
           <motion.div

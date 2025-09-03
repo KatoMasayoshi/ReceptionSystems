@@ -6,6 +6,7 @@ import axios from 'axios';
 const LoginForm = () => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  // const [role, setRole] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [animateError, setAnimateError] = useState(false); // アニメーション用フラグ 
 
@@ -17,7 +18,7 @@ const LoginForm = () => {
       // API に送信するデータ
       const payload = {
         username: userId,
-        password: password
+        password: password,
       };
 
       // FastAPI に POST リクエストを送信
@@ -25,12 +26,19 @@ const LoginForm = () => {
       // 開発環境
       const response = await axios.post('http://192.168.1.3:8000/login', payload)
 
+      // 入力されたIDとPassword 同じレコードのrole列の値を取得
+      const role = response.data.role;
 
+      // roleを保持する
+      localStorage.setItem("role", role);
 
+      console.log(role);
       // レスポンス内容に応じて画面遷移
-      if (response.data.role === 'admin') {
-        navigate('/admin'); // 管理画面
-      } else if (response.data.role === 'user') {
+      if (role === 'admin') {
+        navigate('/admin'); // 管理画面 => 管理者
+      } else if(role === 'staff') { 
+        navigate('/admin'); // 受付画面 => 管理者以外
+      } else{
         navigate('/reception'); // 受付画面
       }
     } catch (error) {

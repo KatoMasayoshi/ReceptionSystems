@@ -1,88 +1,108 @@
 /* 管理画面全体のレイアウト */
 .admin-dashboard {
-    display: flex;
-    height: 100vh;
-    background-color: #e6e6e6;
-    font-family: 'Arial', sans-serif;
-  }
-  
-  /* サイドバー */
-  .sidebar {
-    width: 160px;
-    background-color: #2d2940;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 2rem;
-  }
-  
-  /* サイドバー項目 */
-  .sidebar button {
-    width: 100%;
-    background-color: transparent;
-    border: none;
-    color: white;
-    padding: 1.2rem 0;
-    font-size: 1.1rem;
-    text-align: center;
-    cursor: pointer;
-  }
-  
-  .sidebar button.active {
-    background-color: #d9d9d9;
-    color: #2d2940;
-    font-weight: bold;
-  }
-  
-  /* ログアウトボタンは下に */
-  .sidebar button.logout {
-    margin-top: auto;
-    margin-bottom: 2rem;
-    color: white;
-  }
-  
-  /* メインコンテンツ */
-  .main-content {
-    position: relative; /* ← これを追加 */
-    flex: 1;
-    background-color: white;
-    margin: 2rem;
-    padding: 2rem 3rem;
-    border-radius: 6px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.1);
-  }
+  display: flex;
+  height: 100vh;
+  background-color: #e6e6e6;
+  font-family: 'Arial', sans-serif;
+}
 
-  .admin-dashboard.full-screen .main-content {
-    width: 100%;
-    margin: 0;
-    padding: 2rem 3rem;
-    border-radius: 0;
-  }
-  
-  .admin-dashboard.full-screen .sidebar {
-    display: none;
-  }
-  /* コンテンツの見出し */
-  .main-content h2 {
-    font-size: 1.6rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  /* 編集ボタン（右上） */
-  .edit-button {
-    position: absolute;
-    right: 3rem;
-    top: 2.5rem;
-    padding: 0.6rem 1.5rem;
-    font-size: 0.95rem;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  
-  .edit-button:hover {
-    background-color: #f0f0f0;
-  }
-  
+/* サイドバー */
+.sidebar {
+  width: 160px;
+  background-color: #2d2940;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2rem;
+}
+
+/* サイドバー項目（リンク/ボタン共通） */
+.sidebar a,
+.sidebar button {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  color: white;
+  padding: 1.2rem 0;
+  font-size: 1.1rem;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;      /* リンクの下線を消す */
+  outline: none;
+}
+
+/* hover/focus のフィードバック */
+.sidebar a:hover,
+.sidebar button:hover,
+.sidebar a:focus-visible,
+.sidebar button:focus-visible {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* アクティブ（NavLink の active に合わせる） */
+.sidebar a.active,
+.sidebar button.active {
+  background-color: #d9d9d9;
+  color: #2d2940;
+  font-weight: bold;
+}
+
+/* （任意）表示はするが触れさせたくない “ロック” 見た目 */
+.sidebar a.disabled,
+.sidebar button.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ログアウトボタンは下に固定 */
+.sidebar .logout {
+  margin-top: auto;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+/* メインコンテンツ */
+.main-content {
+  position: relative;
+  flex: 1;
+  background-color: white;
+  margin: 2rem;
+  padding: 2rem 3rem;
+  border-radius: 6px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.admin-dashboard.full-screen .main-content {
+  width: 100%;
+  margin: 0;
+  padding: 2rem 3rem;
+  border-radius: 0;
+}
+
+.admin-dashboard.full-screen .sidebar {
+  display: none;
+}
+
+/* コンテンツの見出し */
+.main-content h2 {
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+}
+
+/* 編集ボタン（右上） */
+.edit-button {
+  position: absolute;
+  right: 3rem;
+  top: 2.5rem;
+  padding: 0.6rem 1.5rem;
+  font-size: 0.95rem;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background-color: #f0f0f0;
+}

@@ -1,14 +1,31 @@
-from fastapi import FastAPI, HTTPException, Body, APIRouter
+from fastapi import FastAPI, HTTPException, Body, APIRouter, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 from pydantic import BaseModel
 from datetime import datetime, timedelta
 import mysql.connector
 from account_api import router as acounnt_router
 from notify_api import router as notify_router
 import re
-import os
+import secrets
+import shutil
 
 app = FastAPI()
+
+# 開発環境の絶対パス
+MEDIR_DIR = Path("C:/React/Release/public/image")
+MEDIR_DIR.mkdir(parents=True, exist_ok=True)
+# FastAPI StaticFilesを使用
+app.mount("/images", StaticFiles(directory=str(MEDIR_DIR)), name="images")
+
+# ファイルタイプを指定
+ALLOWED_TYPES = {"image/png", "image/jpeg", "image/gif", "image/webp"}
+# ファイルサイズを指定
+MAX_SIZE_MB = 10
+
+
+
 
 app.include_router(notify_router)
 
@@ -98,13 +115,19 @@ def login(data: LoginRequest):
         query = "SELECT * FROM users WHERE username = %s AND password = %s"
         cursor.execute(query, (data.username, data.password))
         user = cursor.fetchone()
+        
 
+        
         if not user:
             raise HTTPException(status_code=401, detail="IDまたはパスワードが間違っています")
-        if user['username'].startswith("admin"):
+        
+        role = user["role"]
+        if role == ("admin"):
             return {"role": "admin", "message": "管理画面へ遷移"}
+        elif role == ("staff"):
+            return {"role": "staff", "message": "管理画面へ遷移"}
         else:
-            return {"role": "user", "message": "受付画面へ遷移"}
+            return {"role": "viewer", "message": "受付画面へ遷移"}
 
     except mysql.connector.Error as err:
         raise HTTPException(status_code=500, detail=str(err))
@@ -142,6 +165,7 @@ def add_visitor(visitor: Visitor):
     finally:
         if conn.is_connected():
             cursor.close()
+            conn.close()
 
 @app.get("/visitors-logs")
 def get_visitors():
@@ -260,6 +284,24 @@ def delete_employee(employee_id: int):
         if conn.is_connected():
             cursor.close()
             conn.close()
+
+@app.post("/upload-image")
+def upload_image(name: str = Form(...), file: UploadFile = File(...)):
+    # MIMEチェック
+    if file.content_type not in ALLOWED_TYPES:
+        raise HTTPException(400, "画像ファイルのみ許可(png/jpg/jpeg/gif/webp)")
+    # 拡張子を保持
+    ext = Path(file.filename).suffix.lower() or ".png"
+    filename = f"{name}{ext}"
+    dest = MEDIR_DIR / filename
+    
+    # 保存(既存があれば上書き)
+    with dest.open("wb") as f:
+        shutil.copyfileobj(file.file, f)
+        
+    return {"image_path": f"/images/{filename}"}
+    
+
 
 # ======= 外部ルーター読み込み =======
 app.include_router(acounnt_router)

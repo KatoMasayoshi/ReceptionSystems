@@ -4,11 +4,18 @@ import './EmployeeTable.css';
 import axios from 'axios';
 
 const EmployeeTable = () => {
+  // オブジェクト配列 const[現在の状態を保持する変数, 状態を更新するための関数] = useState(状態の初期値で、文字列、数値、配列、オブジェクトなど、任意のデータ型を指定)
+  // 従業員のオブジェクト配列
   const [employees, setEmployees] = useState([]);
   const [editingId, setEditingId] = useState(null);
+  // 編集ボタン押下時に使用するオブジェクト配列
   const [editFormData, setEditFormData] = useState({ name: '', department: '', image_path: '' });
+  // 追加ボタンを押下時に使用するオブジェクト配列
   const [newEmployee, setNewEmployee] = useState({ name: '', department: '', image_path: '' });
   const [showModal, setShowModal] = useState(false);
+  // 画像アップロードのオブジェクト配列
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     fetchEmployees();
@@ -21,6 +28,7 @@ const EmployeeTable = () => {
       .catch((err) => console.error(err));
   };
 
+  // 編集ボタンが押下されたときの処理
   const handleEditClick = (employee) => {
     setEditingId(employee.id);
     setEditFormData({
@@ -30,6 +38,7 @@ const EmployeeTable = () => {
     });
   };
 
+  // 保存ボタンが押下されたときの処理
   const handleSaveClick = async (id) => {
     try{
       // await axios.put(`/api/employees/${id}`, {
@@ -47,15 +56,17 @@ const EmployeeTable = () => {
   };
 
 
-  // 削除確認で'はい'が押されたとき
+  // 削除確認で'はい'が押されたときの処理
   const handleDeleteClick = (id) => {
     // axios.delete(`/api/employees/${id}`)
     console.log(id)
     axios.delete(`http://192.168.1.3:8000/employees/${id}`)
       .then(() => {
         setEmployees(employees.filter(emp => emp.id !== id));
-      });
+      })
+      .catch(err => console.error(err));
   };
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -67,15 +78,62 @@ const EmployeeTable = () => {
     setNewEmployee(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleImageSelect = (e, isEdit = false) => {
-    const file = e.target.files[0];
-    if (file) {
-      const relativePath = `/image/${file.name}`; // public/image/ 配下前提
-      if (isEdit) {
-        setEditFormData(prev => ({ ...prev, image_path: relativePath }));
-      } else {
-        setNewEmployee(prev => ({ ...prev, image_path: relativePath }));
+  // 画像を選択する処理
+  // const handleImageSelect = (e, isEdit = false) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const relativePath = `/image/${file.name}`; // public/image/ 配下前提
+  //     console.log(relativePath);
+  //     if (isEdit) {
+  //       setEditFormData(prev => ({ ...prev, image_path: relativePath }));
+  //     } else {
+  //       setNewEmployee(prev => ({ ...prev, image_path: relativePath }));
+  //     }
+  //   }
+  // };
+
+  const handleImageSelect = async (e, isEdit = false) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const name = isEdit ? editFormData.name : newEmployee.name;
+
+    // クライアント側で軽くバリデーション(任意)
+    if(!/^image\/(png|jpe?g|gif|webp)$/.test(file.type)){
+      alert("画像ファイル(png/jpg/jpeg/gif/webp)を選択してください");
+      return;
+    }
+    if(file.size > 10 * 1024 * 1024){ // 10MB例
+      alert("ファイルが大きすぎます(10MBまで)");
+      return;
+    }
+
+    const fd = new FormData();
+    fd.append("file", file);
+    fd.append("name", name);
+
+
+    try{
+      setUploading(true);
+      setProgress(0);
+      const res = await axios.post('http://192.168.1.3:8000/upload-image', fd,{
+        headers:{ "Content-Type": "multipart/form-data"},
+        onUploadProgress: (evt) => {
+          if (evt.total) setProgress(Math.round((evt.loaded / evt.total) * 100));
+        }
+      });
+
+      // サーバーが返したURL(/images/xxx)をそのまま保持
+      if (isEdit){
+        setNewEmployee(prev => ({...prev, image_path: res.data.image_path}));
+      } else{
+      setNewEmployee(prev => ({...prev, image_path: res.data.image_path }))
       }
+    }catch (err){
+      console.error("アップロード失敗:", err);
+      alert("アップロード失敗");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -89,8 +147,8 @@ const EmployeeTable = () => {
       });
   };
 
-  // 削除ボタン押下時に確認メッセージを出す
-  const deletecheck = (id) => {
+  // 削除ボタン押下時に確認メッセージを出す処理
+  const confirmDelete = (id) => {
     let checkSaveFlg = window.confirm('削除しますか？');
     if(checkSaveFlg){
       handleDeleteClick(id)
@@ -191,7 +249,7 @@ const EmployeeTable = () => {
                   ) : (
                     <>
                       <button onClick={() => handleEditClick(emp)}>編集</button>
-                      <button className='delete-button' onClick={() => deletecheck(emp.id)}>削除</button>
+                      <button className='delete-button' onClick={() => confirmDelete(emp.id)}>削除</button>
                     </>
                   )}
                 </td>
