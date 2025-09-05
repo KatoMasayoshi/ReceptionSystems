@@ -84,12 +84,12 @@
   /* padding: 1rem; */
   border: none;
   border-radius: 50%;
-  width: 3.6rem;               /* サイズ明示するならこれもあり */
-  height: 3.6rem;              /* 高さも調整 */
+  width: 4.3rem;               /* サイズ明示するならこれもあり */
+  height: 4.3rem;              /* 高さも調整 */
 
   background-color: #ffffff;
   color: #333;
-  box-shadow: 0 2px 13px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   cursor: pointer;
   transition: transform 0.1s;
 
@@ -138,7 +138,7 @@
   font-family: "hiragino-kaku-gothic-pron", sans-serif;
   font-style: normal;
   position: relative;
-  left: -15rem;
+  left: -10rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   /* letter-spacing: 5px; */
 }
@@ -154,7 +154,7 @@
   font-style: normal;
   letter-spacing: 5px;
   position: relative;
-  left: -20rem;
+  left: -25rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -211,7 +211,8 @@
 
 /* 濁点・半濁点の見た目（既存の .key-kanaeisu に合わせたトーン） */
 .bottom-buttons .key-dakuten,
-.bottom-buttons .key-handakuten {
+.bottom-buttons .key-handakuten,
+.bottom-buttons .key-syoumozi {
   padding: 0.6rem 1.2rem;
   background-color: #ffffff;
   color: #333;

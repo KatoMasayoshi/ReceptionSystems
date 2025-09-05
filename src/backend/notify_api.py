@@ -7,9 +7,9 @@ router = APIRouter()
 
 LINE_ACCESS_TOKEN = "1XHXcpj+pwyvwWeOAK9BVAj4phJ9ePn7RJ4fZLlso6VFGPIfqmtcJxLA9dtEan65cShksVRUmujKbcXt3d+dXwFCYk9G/RE4nMpwl27KW6N/owi1na4ehWo2pxmgZj/xyzIyWjrdxLQ+uoY7JY4cJgdB04t89/1O/w1cDnyilFU="
 # GROUPの内部ID
-GROUP_ID = "C2ebf1193fb6114fdae1bb66f0ba192fc"
+# GROUP_ID = "C2ebf1193fb6114fdae1bb66f0ba192fc"
 # デバッグ用(自分の内部ID)
-# GROUP_ID = "U0095e4129f2d859fbe0e2e90e213e4ee"
+GROUP_ID = "U0095e4129f2d859fbe0e2e90e213e4ee"
 
 class NotifyRequest(BaseModel):
     employee_name: str

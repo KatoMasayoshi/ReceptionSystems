@@ -1,0 +1,20 @@
+.backnav-btn {
+  position: fixed;
+  top: 2rem;
+  left: 3rem;
+  z-index: 10000;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+.backnav-icon {
+  width: 5rem;      /* 必要なら調整 */
+  height: auto;
+  fill: #000;       /* 背景次第で #fff などに調整 */
+  transition: opacity .08s linear, transform .08s ease;
+  will-change: opacity, transform;
+}
+.backnav-btn.is-hiding .backnav-icon {
+  opacity: 0;
+  transform: translateX(-4px);
+}

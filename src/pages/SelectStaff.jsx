@@ -1,36 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/selectstaff.css';
-import BackArrow from "../components/common/BackArrow";
+// import BackArrow from "../components/common/BackArrow";
 import { motion } from 'motion/react';
-import { playClickSound } from '../utils/sound';
+import { useSound } from '../utils/sound';
 import axios from 'axios';
+import { flushSync } from 'react-dom';
+
+import BackNavButton from '../components/common/BackNavButton';
 
 const SelectStaff = () => {
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]); // 🔄 社員情報をここに取得
+  const { playNav } = useSound(); 
+  // // 矢印
+  // const [hidding, setHiding] = useState(false);
 
   // 🔄 ページ表示時にAPIから社員データを取得
   useEffect(() => {
     // axios.get('/api/employees')
-    axios.get('http://192.168.1.3:8000/employees') // <= 開発環境
+    axios.get('http://192.168.1.6:8000/employees') // <= 開発環境
       .then(res => setEmployees(res.data))
       .catch(err => console.error('社員情報取得エラー:', err));
   }, []);
 
-  const handleBack = () => {
-    playClickSound();
-    navigate('/reception');
-  };
+  // const handleBack = () => {
+  //   requestAnimationFrame(() => {
+  //     navigate('/reception');
+  //   })
+  // };
 
   const handleStaffClick = (emp) => {
-    playClickSound();
-    navigate('/input', { state: { staffName: emp.name, staffImage: emp.image_path } });
+    playNav();
+    requestAnimationFrame(() => {
+      navigate('/input', { state: { staffName: emp.name, staffImage: emp.image_path } });
+    })
   };
+
+  // const onArrowDown = () => {
+  //   // このフレームで見た目を確実に更新
+  //   flushSync(() => setHiding(true));
+  //   playNav();
+  // }
 
   return (
     <>
-      <BackArrow onClick={handleBack} />
+      <BackNavButton to="/reception" />
       <motion.div
         className="select-staff-page"
         initial={{ x: '100%', opacity: 0 }}

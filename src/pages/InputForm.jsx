@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import BackArrow from '../components/common/BackArrow';
+// import BackArrow from '../components/common/BackArrow';
 import Keyboard from '../components/common/Keyboard';
 import '../css/inputform2.css';
 
 // クリック時に音を出す
-import { playClickSound } from '../utils/sound';
+import { useSound } from '../utils/sound';
+import BackNavButton from '../components/common/BackNavButton';
+// import { flushSync } from 'react-dom';
 
 const InputForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const selectedStaff = location.state?.staffName || '未選択';
   const selectedImage = location.state?.staffImage || '/image/default.png';
-
+  // 矢印
+  // const [hidden, setHiding] = useState(false);
+  const { playNav } = useSound();
   const [formData, setFormData] = useState({
     company: '',
     name: '',
@@ -47,20 +51,25 @@ const InputForm = () => {
   };
 
   const handleSubmit = (e) => {
-    playClickSound();
-    e.preventDefault();
+    playNav();
+    requestAnimationFrame(() => {
+      e.preventDefault();
+    })
   };
 
   const handleCall = () => {
-    playClickSound();
+    playNav();
+    requestAnimationFrame(() => {
+      // 🔍 バリデーション：必須項目チェック
+      if (!formData.company || !formData.name || !formData.purpose) {
+        alert("⚠️ 必須項目がすべて入力されているか確認してください！");
+        return; // ⛔ 処理を中断
+      }    
+    })
 
-    // 🔍 バリデーション：必須項目チェック
-    if (!formData.company || !formData.name || !formData.purpose) {
-      alert("⚠️ 必須項目がすべて入力されているか確認してください！");
-      return; // ⛔ 処理を中断
-    }    
     // DBに来訪者情報を登録
-    axios.post('/api/visitors', formData)
+    // axios.post('/api/visitors', formData)
+    axios.post('http://192.168.1.6:8000/visitors', formData)
       .then(() => {
         // 登録が成功したら、LINE通知用にデータを整形して送信！
         const notifyData = {
@@ -71,7 +80,8 @@ const InputForm = () => {
           companions: formData.persons        // 同行人数
         };
 
-        axios.post('/api/notify', notifyData)
+        // axios.post('/api/notify', notifyData)
+        axios.post('http://192.168.1.6:8000/notify', notifyData)
           .then(() => {
             // 通知成功したら「呼び出し中」画面へ遷移
             navigate('/calling', { state: { staffName: selectedStaff, staffImage: selectedImage } });
@@ -89,9 +99,9 @@ const InputForm = () => {
   };
 
 
-  const handleBack = () => {
-    navigate('/select-staff');
-  };
+  // const handleBack = () => {
+  //   navigate('/select-staff');
+  // };
 
   return (
     <div className='input-screen'>
@@ -99,7 +109,7 @@ const InputForm = () => {
         <h2 className="header-text">来訪目的・会社名・氏名を記入してください</h2>
 
         <div className="Form">
-          <BackArrow onClick={handleBack} />
+          <BackNavButton to="/select-staff" />
 
           {/* ▼ 来訪目的（先頭に移動） */}
           <div className="Form-Item">

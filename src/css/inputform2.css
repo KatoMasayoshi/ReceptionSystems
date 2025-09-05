@@ -274,3 +274,10 @@ h2.header-text{
   border-radius: 10px;
   background-color: #F5FEFF;
 }
+
+/* 非表示状態：瞬時に消す */
+.arrow-button.is-hiding .arrow {
+  opacity: 0;
+  transform: translateX(-4px);
+}
+  

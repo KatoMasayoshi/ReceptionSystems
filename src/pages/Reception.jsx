@@ -4,17 +4,22 @@ import '../css/reception.css';
 import { useNavigate } from 'react-router-dom';
 // ✅ motionを読み込み
 import { motion } from 'motion/react';
-// import background from "../image/Blue_Mountain_Water_Close_Up_original_1485080.jpg"
 
-import { playClickSound } from '../utils/sound';
+import { useSound } from '../utils/sound';
+import { useQueryClient } from '@tanstack/react-query';
+
+
 
 const Reception = () => {
   const navigate = useNavigate();
   const timerRef = useRef(null)
+  const { playNav } = useSound();
 
   const handleCallStaff = () => {
-    playClickSound();
-    navigate('/select-staff');
+    playNav();
+    requestAnimationFrame(() => {
+      navigate('/select-staff');
+    })
   };
 
   const handleCallStaffs = async (type) => {
@@ -26,6 +31,8 @@ const Reception = () => {
       const response = await fetch(`${endpoint}`, {
         method: "POST",
       });
+
+      console.log(response)
   
       if (response.ok) {
         // ✅ 通知が成功したら「呼び出し中」画面へ遷移！
@@ -64,23 +71,6 @@ const Reception = () => {
   };
 
   
-
-  // const handleCallStaffs = () => {
-  //   playClickSound();
-  //   navigate('/seliveryandInfocalling');
-  // };
-
-  // const handleDelivery = () => {
-  //   fetch("http://localhost:8000/api/notify/delivery", { method: "POST" })
-  //   .then(() => alert("通知を送信しました！"))
-  //   .catch(() => alert("通知に失敗しました..."));
-  // };
-
-  // const handleGeneral = () => {
-  //   fetch("http://localhost:8000/api/notify/general", { method: "POST" })
-  //     .then(() => alert("通知を送信しました！"))
-  //     .catch(() => alert("通知に失敗しました…"));
-  // };
 
   return (
     // ✅ motion.div で画面全体をアニメーション付きでラップ

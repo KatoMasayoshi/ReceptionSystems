@@ -8,7 +8,8 @@ const DeliveryAndInfoCalling = () =>{
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            navigate('/waitscreen');
+            // navigate('/waitscreen');
+            navigate('http://192.168.1.5:8000/waitscreen');
         }, 5000 ) // 10秒後に受付画面に戻る
 
         return () => clearTimeout(timer);

@@ -14,6 +14,14 @@ body {
     top: 2em;
     left: 2em;
   }
+
+/* 矢印アイコン（配置は親ボタンに任せる） */
+.arrow {
+  width: 10em;
+  height: auto;
+  transition: opacity .08s linear, transform .08s ease;
+  will-change: opacity, transform;
+}
   
   /* 戻る矢印ボタンのラッパー */
   .arrow-button {
@@ -89,4 +97,10 @@ body {
     text-align: center;
     font-family: 'Noto Sans JP', sans-serif;
   }
+
+/* 非表示状態：瞬時に消す */
+.arrow-button.is-hiding .arrow {
+  opacity: 0;
+  transform: translateX(-4px);
+}
   

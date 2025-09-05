@@ -16,7 +16,8 @@ app = FastAPI()
 # 開発環境の絶対パス
 MEDIR_DIR = Path("C:/React/Release/public/image")
 MEDIR_DIR.mkdir(parents=True, exist_ok=True)
-# FastAPI StaticFilesを使用
+
+# サーバーのimagesフォルダに保存される name="フォルダ名
 app.mount("/images", StaticFiles(directory=str(MEDIR_DIR)), name="images")
 
 # ファイルタイプを指定
@@ -285,13 +286,17 @@ def delete_employee(employee_id: int):
             cursor.close()
             conn.close()
 
+
 @app.post("/upload-image")
+# Form(...) => フォームデータからnameを必須入力として受ける
 def upload_image(name: str = Form(...), file: UploadFile = File(...)):
+    print(f'{name}')
     # MIMEチェック
     if file.content_type not in ALLOWED_TYPES:
         raise HTTPException(400, "画像ファイルのみ許可(png/jpg/jpeg/gif/webp)")
-    # 拡張子を保持
+    # 拡張子を保持 デフォルトでpng
     ext = Path(file.filename).suffix.lower() or ".png"
+    
     filename = f"{name}{ext}"
     dest = MEDIR_DIR / filename
     

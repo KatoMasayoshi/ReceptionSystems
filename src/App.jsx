@@ -26,7 +26,6 @@ const AnimatedRoutes = () => {
 
   const RequireAdmin = ({children}) => {
     const role = localStorage.getItem("role");
-    console.log(role);
     return role === "admin" ? children : <Navigate to = "/" replace />;
   }
 

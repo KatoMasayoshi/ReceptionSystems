@@ -3,11 +3,20 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SoundProvider } from './utils/sound'; 
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const queryclient = new QueryClient();
+
 root.render(
   <React.StrictMode>
-    <App />
+    <SoundProvider>
+    <QueryClientProvider client={queryclient}>
+      <App />
+    </QueryClientProvider>
+    </SoundProvider>
   </React.StrictMode>
 );
 

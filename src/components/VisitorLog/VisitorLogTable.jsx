@@ -10,7 +10,7 @@ const VisitorLogTable = ({ isEditing, setIsEditing }) => {
   // 最初の1回だけ実行される処理（DBから一覧取得）
   useEffect(() => {
     // axios.get('/api/visitor-logs')
-    axios.get('http://192.168.1.3:8000/visitor-logs')
+    axios.get('http://192.168.1.5:8000/visitor-logs')
     .then((res) => setVisitorLogs(res.data))
       .catch((err) => console.error('取得失敗:', err));
   }, []);

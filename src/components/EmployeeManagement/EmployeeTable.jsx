@@ -13,9 +13,9 @@ const EmployeeTable = () => {
   // 追加ボタンを押下時に使用するオブジェクト配列
   const [newEmployee, setNewEmployee] = useState({ name: '', department: '', image_path: '' });
   const [showModal, setShowModal] = useState(false);
-  // 画像アップロードのオブジェクト配列
-  const [uploading, setUploading] = useState(false);
-  const [progress, setProgress] = useState(0);
+  // アップロード中のローディング(今は使用していない)
+  // const [uploading, setUploading] = useState(false);
+  // const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     fetchEmployees();
@@ -23,7 +23,7 @@ const EmployeeTable = () => {
 
   const fetchEmployees = () => {
     // axios.get('/api/employees')
-    axios.get('http://192.168.1.3:8000/employees')
+    axios.get('http://192.168.1.5:8000/employees')
     .then((res) => setEmployees(res.data))
       .catch((err) => console.error(err));
   };
@@ -42,7 +42,7 @@ const EmployeeTable = () => {
   const handleSaveClick = async (id) => {
     try{
       // await axios.put(`/api/employees/${id}`, {
-      await axios.put(`http://192.168.1.3:8000/employees/${id}`, {
+      await axios.put(`http://192.168.1.5:8000/employees/${id}`, {
         name: editFormData.name,
         department: editFormData.department,
         image_path: editFormData.image_path
@@ -60,7 +60,7 @@ const EmployeeTable = () => {
   const handleDeleteClick = (id) => {
     // axios.delete(`/api/employees/${id}`)
     console.log(id)
-    axios.delete(`http://192.168.1.3:8000/employees/${id}`)
+    axios.delete(`http://192.168.1.5:8000/employees/${id}`)
       .then(() => {
         setEmployees(employees.filter(emp => emp.id !== id));
       })
@@ -95,8 +95,10 @@ const EmployeeTable = () => {
   const handleImageSelect = async (e, isEdit = false) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    const baseName = isEdit ? editFormData.name : newEmployee.name;
 
-    const name = isEdit ? editFormData.name : newEmployee.name;
+    const name = String(baseName || "").trim() || file.name.replace(/\.[^.]+$/, ''); // 拡張子除去
+
 
     // クライアント側で軽くバリデーション(任意)
     if(!/^image\/(png|jpe?g|gif|webp)$/.test(file.type)){
@@ -108,24 +110,21 @@ const EmployeeTable = () => {
       return;
     }
 
+    // サーバーに画像を送るためにFormDataを作成する
     const fd = new FormData();
-    fd.append("file", file);
-    fd.append("name", name);
+    fd.append("file", file);    // ファイル本体
+    fd.append("name", name);    // 任意の名前(社員名など)
 
 
     try{
-      setUploading(true);
-      setProgress(0);
-      const res = await axios.post('http://192.168.1.3:8000/upload-image', fd,{
-        headers:{ "Content-Type": "multipart/form-data"},
-        onUploadProgress: (evt) => {
-          if (evt.total) setProgress(Math.round((evt.loaded / evt.total) * 100));
-        }
-      });
 
+      // const res = await axios.post('/api/upload-image', fd);
+      const res = await axios.post('http://192.168.1.5:8000/upload-image', fd);
+
+      console.log(res.data.image_path);
       // サーバーが返したURL(/images/xxx)をそのまま保持
       if (isEdit){
-        setNewEmployee(prev => ({...prev, image_path: res.data.image_path}));
+        setEditFormData(prev => ({...prev, image_path: res.data.image_path}));
       } else{
       setNewEmployee(prev => ({...prev, image_path: res.data.image_path }))
       }
@@ -133,13 +132,13 @@ const EmployeeTable = () => {
       console.error("アップロード失敗:", err);
       alert("アップロード失敗");
     } finally {
-      setUploading(false);
+      // setUploading(false);
     }
   };
 
   const handleAddEmployee = () => {
     // axios.post('/api/employees', newEmployee)
-    axios.post('http://192.168.1.3:8000/employees', newEmployee)
+    axios.post('http://192.168.1.5:8000/employees', newEmployee)
       .then(() => {
         fetchEmployees();
         setNewEmployee({ name: '', department: '', image_path: '' });
@@ -186,6 +185,7 @@ const EmployeeTable = () => {
               type="file"
               accept="image/*"
               onChange={(e) => handleImageSelect(e)}
+              onClick={(e) => e.stopPropagation()}
             />
             {newEmployee.image_path && (
               <img src={newEmployee.image_path} alt="プレビュー" style={{ width: 80, height: 80 }} />

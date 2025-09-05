@@ -7,49 +7,23 @@ import {  NavLink, Outlet } from 'react-router-dom';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
-  // const [activeTab, setActiveTab] = useState('visitor');
-  // const [isEditing, setIsEditing] = useState(false); // 編集状態を親に伝える
-
-  // const handleTabChange = (tab) => {
-  //   setActiveTab(tab);
-  // };
-
   const [isEditing, setIsEditing] = useState(false); // 編集状態を親に伝える
-  // const navigate = useNavigate();
-  // console.log(localStorage.setItem("role"));
+  
+  // adminだったらアカウント管理画面を表示 staffだったら非表示
   const role = localStorage.getItem("role");
-
-
 
   return (
     <div className={`admin-dashboard ${isEditing ? 'full-screen' : ''}`}>
       {!isEditing && (
         <div className="sidebar">
-          {/* <button
-            className={activeTab === 'visitor' ? 'active' : ''}
-            onClick={() => handleTabChange('visitor')}
-          >
-            来訪者管理
-          </button> */}
           <NavLink to="/admin/visitors" className={({isActive}) => isActive ? 'active' : ''}>
             来訪者管理
           </NavLink>
-          {/* <button
-            className={activeTab === 'employee' ? 'active' : ''}
-            onClick={() => handleTabChange('employee')}
-          >
-            社員管理
-          </button> */}
 
           <NavLink to="/admin/employees" className={({isActive}) => isActive ? 'active' : ''}>
             社員管理
           </NavLink>
-          {/* <button
-            className={activeTab === 'setting' ? 'active' : ''}
-            onClick={() => handleTabChange('setting')}
-          >
-            アカウント管理
-          </button> */}
+
           {role === 'admin' &&(
             <NavLink to="/admin/accounts" className={({isActive}) => isActive ? 'active' : ''}>
               アカウント管理

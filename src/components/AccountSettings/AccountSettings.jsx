@@ -19,7 +19,7 @@ const AccountSettings = () => {
 
   const fetchUsers = () => {
     // axios.get('/api/users')
-    axios.get('http://192.168.1.3:8000/users')
+    axios.get('http://192.168.1.5:8000/users')
       .then(res => setUsers(res.data))
       .catch(err => console.error('ユーザー取得エラー:', err));
   };
@@ -50,7 +50,7 @@ const AccountSettings = () => {
       return;
     }
 
-    axios.post('/api/users', formData)
+    axios.post('http://192.168.1.5:8000/users', formData)
       .then(() => {
         setFormData({ username: '', password: '' });
         setIsModalOpen(false);
@@ -70,7 +70,8 @@ const AccountSettings = () => {
   };
 
   const handleSave = (id) => {
-    axios.put(`/api/users/${id}`, editFormData)
+    // axios.put(`/api/users/${id}`, editFormData)
+    axios.put(`http://192.168.1.5:8000/users/${id}`, editFormData)
       .then(() => {
         setEditUserId(null);
         fetchUsers();
@@ -79,7 +80,8 @@ const AccountSettings = () => {
   };
 
   const handleDelete = (id) => {
-    axios.delete(`/api/users/${id}`)
+    // axios.delete(`/api/users/${id}`)
+    axios.delete(`http://192.168.1.5:8000/users/${id}`)
       .then(() => fetchUsers())
       .catch(err => console.error('削除エラー:', err));
   };

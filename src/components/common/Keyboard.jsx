@@ -31,6 +31,11 @@ const handakutenMap = {
   "ハ":"パ","ヒ":"ピ","フ":"プ","ヘ":"ペ","ホ":"ポ",
 };
 
+const syoumoziMap = {
+  "ア":"ァ", "イ":"ィ", "ウ":"ゥ", "エ":"ェ", "オ":"ォ",
+  "カ":"ヵ", "ツ":"ッ", "ヤ":"ャ", "ユ":"ュ", "ヨ":"ョ",
+};
+
 const Keyboard = ({ value, onInput, onClose, placeholder="入力してください" }) => {
   const [mode, setMode] = useState("katakana");
 
@@ -55,6 +60,7 @@ const Keyboard = ({ value, onInput, onClose, placeholder="入力してくださ�
   // 逆引き（元に戻す用）
 const revDakutenMap   = Object.fromEntries(Object.entries(dakutenMap).map(([k,v]) => [v, k]));
 const revHandakutenMap= Object.fromEntries(Object.entries(handakutenMap).map(([k,v]) => [v, k]));
+const revSyoumoziMap = Object.fromEntries(Object.entries(syoumoziMap).map(([k,v]) => [v,k]));
 
 const applyDakuten = () => {
   if (!value) return;
@@ -105,6 +111,23 @@ const applyHandakuten = () => {
   }
 };
 
+const applysyomozi = () => {
+  if(!value) return;
+  const last = value.slice(-1);
+  const head = value.slice(0, -1);
+
+  // 既に小文字 => ベースに戻す
+  if(revSyoumoziMap[last]){
+    onInput(head + revSyoumoziMap[last]);
+    return;
+  }
+
+  // ベース => 小文字
+  if(syoumoziMap[last]){
+    onInput(head + syoumoziMap[last]);
+  }
+};
+
   return (
     <div className="keyboard-popup-overlay">
       <div className="keyboard-popup">
@@ -139,6 +162,11 @@ const applyHandakuten = () => {
         <div className="bottom-buttons">
           <button className="key-space" onClick={handleSpace}>
             スペース
+          </button>
+
+          {/* 小文字 */}
+          <button className="key-syoumozi" onClick={applysyomozi}>
+            小
           </button>
 
           {/* 追加: 濁点/半濁点 */}
