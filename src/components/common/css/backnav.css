@@ -18,3 +18,12 @@
   opacity: 0;
   transform: translateX(-4px);
 }
+
+.kb-open .backnav-btn {
+  opacity: 0;
+  pointer-events: none;
+}
+.kb-open .backnav-icon {
+  transform: translateX(-4px);
+  transition: opacity .08s linear, transform .08s ease;
+}

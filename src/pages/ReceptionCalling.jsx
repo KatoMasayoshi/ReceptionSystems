@@ -20,7 +20,7 @@ const Calling = () => {
   
     return (
       <div className="calling-page">
-        <img src={staffImage} alt={staffName} className="staff-image" />
+        <img src={staffImage} alt={staffName} className="image" />
         {/* ローディングバーを div で置き換え */}
         <div className="loading-bar-container">
           <div className="loading-bar"></div>

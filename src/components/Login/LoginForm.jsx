@@ -25,7 +25,7 @@ const LoginForm = () => {
       // FastAPI に POST リクエストを送信
       // const response = await axios.post('/api/login', payload)
       // 開発環境
-      const response = await axios.post('http://192.168.1.6:8000/login', payload)
+      const response = await axios.post('http://192.168.1.7:8000/login', payload)
 
       // 入力されたIDとPassword 同じレコードのrole列の値を取得
       const role = response.data.role;
@@ -37,21 +37,21 @@ const LoginForm = () => {
       if (role === 'admin') {
         await qc.prefetchQuery({
           queryKey: ['admin'],
-          queryFn: () => axios.get('/api/admin').then(r => r.data),
+          queryFn: () => axios.get('http://192.168.1.7:8000/admin').then(r => r.data),
           staleTime: 60_000,
         });
         navigate('/admin', {replace: true}); // 管理画面 => 管理者
       } else if(role === 'staff') { 
           await qc.prefetchQuery({
           queryKey: ['admin'],
-          queryFn: () => axios.get('/api/admin').then(r => r.data),
+          queryFn: () => axios.get('http://192.168.1.7:8000/admin').then(r => r.data),
           staleTime: 60_000,
         })
         navigate('/admin', {replace: true}); // 受付画面 => 管理者以外
       } else{
         await qc.prefetchQuery({
           queryKey: ['reception'],
-          queryFn: () => axios.get('/api/reception').then(r => r.data),
+          queryFn: () => axios.get('http://192.168.1.7:8000/reception').then(r => r.data),
           staleTime: 60_000,
         });
         navigate('/reception', {replace: true}); // 受付画面

@@ -7,6 +7,7 @@ import { motion } from 'motion/react';
 
 import { useSound } from '../utils/sound';
 import { useQueryClient } from '@tanstack/react-query';
+import { image } from 'motion/react-client';
 
 
 
@@ -24,8 +25,8 @@ const Reception = () => {
 
   const handleCallStaffs = async (type) => {
     const endpoint = type === "delivery"
-      ? "/api/notify/delivery"
-      : "/api/notify/general";
+      ? "http://192.168.1.7:8000/notify/delivery"
+      : "http://192.168.1.7:8000/notify/general";
   
     try {
       const response = await fetch(`${endpoint}`, {
@@ -36,7 +37,9 @@ const Reception = () => {
   
       if (response.ok) {
         // ✅ 通知が成功したら「呼び出し中」画面へ遷移！
-        navigate("/seliveryandInfocalling", { state: { type } }); // 受付種類を渡すこともできるよ
+        type === "delivery" 
+          ? navigate("/seliveryandInfocalling", { state: { type, image: "/image/配達.png"} }) // 受付種類を渡すこともできるよ
+          :  navigate("/seliveryandInfocalling", { state: { type, image: "/image/総合受付.png"} }); // 受付種類を渡すこともできるよ
       } else {
         alert("通知に失敗しました！");
       }

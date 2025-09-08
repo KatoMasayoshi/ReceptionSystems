@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-// import BackArrow from '../components/common/BackArrow';
 import Keyboard from '../components/common/Keyboard';
 import '../css/inputform2.css';
 
@@ -15,8 +14,6 @@ const InputForm = () => {
   const navigate = useNavigate();
   const selectedStaff = location.state?.staffName || '未選択';
   const selectedImage = location.state?.staffImage || '/image/default.png';
-  // 矢印
-  // const [hidden, setHiding] = useState(false);
   const { playNav } = useSound();
   const [formData, setFormData] = useState({
     company: '',
@@ -24,7 +21,19 @@ const InputForm = () => {
     purpose: '新規打ち合わせ',
     persons: ''
   });
-  const [keyboardTarget, setKeyboardTarget] = useState(null); // 自作キーボードの対象フィールド
+  // 自作キーボードの対象フィールド
+  const [keyboardTarget, setKeyboardTarget] = useState(null); 
+  // キーボードオープン時に矢印を非表示にする(画面遷移)
+  const [kbOpen, setKbOpen] = useState(false);
+
+  // キーボードを開く/閉じるタイミングでtrue/falseをセット
+  const onFocus = () => setKbOpen(true);
+  const onBlur = ()  => setKbOpen(false);
+
+  useEffect(() => {
+    document.body.classList.toggle('kb-open', kbOpen);
+    return () => document.body.classList.remove('kb-open');
+  }, [kbOpen]);
 
   // 入力変更処理（来訪目的変更時の特別処理を含む）
   const handleChange = (e) => {
@@ -69,7 +78,7 @@ const InputForm = () => {
 
     // DBに来訪者情報を登録
     // axios.post('/api/visitors', formData)
-    axios.post('http://192.168.1.6:8000/visitors', formData)
+    axios.post('http://192.168.1.7:8000/visitors', formData)
       .then(() => {
         // 登録が成功したら、LINE通知用にデータを整形して送信！
         const notifyData = {
@@ -81,7 +90,7 @@ const InputForm = () => {
         };
 
         // axios.post('/api/notify', notifyData)
-        axios.post('http://192.168.1.6:8000/notify', notifyData)
+        axios.post('http://192.168.1.7:8000/notify', notifyData)
           .then(() => {
             // 通知成功したら「呼び出し中」画面へ遷移
             navigate('/calling', { state: { staffName: selectedStaff, staffImage: selectedImage } });
@@ -94,9 +103,9 @@ const InputForm = () => {
       .catch((err) => {
         console.error('来訪者の登録に失敗しました:', err);
       });
-
-
   };
+
+
 
 
   // const handleBack = () => {
@@ -137,6 +146,7 @@ const InputForm = () => {
               value={formData.company}
               onClick={() => {
                 if (formData.purpose !== '面接') setKeyboardTarget('company');
+                setKbOpen(true);
               }}
               readOnly
               disabled={formData.purpose === '面接'} // 面接時は入力無効
@@ -156,7 +166,7 @@ const InputForm = () => {
               placeholder="例）山田太郎"
               autoComplete="off"
               value={formData.name}
-              onClick={() => setKeyboardTarget('name')}
+              onClick={() => {setKeyboardTarget('name'); setKbOpen(true); }}
               readOnly
               required
             />
@@ -189,7 +199,7 @@ const InputForm = () => {
         <Keyboard
           value={formData[keyboardTarget]}
           onInput={handleKeyboardInput}
-          onClose={() => setKeyboardTarget(null)}
+          onClose={() => {setKeyboardTarget(null); setKbOpen(false);}}
           placeholder={
             keyboardTarget === 'company'
               ? 'あなたの会社名'

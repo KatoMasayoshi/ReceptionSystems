@@ -16,7 +16,7 @@ export function SoundProvider({ children }) {
           click.pause();
           click.currentTime = 0;
           // await しない＝体感同時
-          click.play();
+          click.play().catch(() => {});
         } catch {
           /* no-op */
         }
@@ -31,15 +31,19 @@ export function SoundProvider({ children }) {
     if (!click) return;
 
     const unlock = () => {
-      click.play().then(() => {
-        click.pause();
-        click.currentTime = 0;
-      });
-      window.removeEventListener("pointerdown", unlock);
+      click.play()
+        .then(() => { click.pause(); click.currentTime = 0; })
+        .catch(() => {});
+        window.removeEventListener("pointerdown", unlock);
+        window.removeEventListener("touchstart", unlock);
     };
 
-    window.addEventListener("pointerdown", unlock, { once: true });
-    return () => window.removeEventListener("pointerdown", unlock);
+    window.addEventListener("pointerdown", unlock, { once: true});
+    window.addEventListener("touchstart", unlock,  { once : true});
+    return() => {
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("touchstart", unlock);
+    }
   }, [api]);
 
   return <SoundCtx.Provider value={api}>{children}</SoundCtx.Provider>;

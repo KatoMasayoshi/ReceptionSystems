@@ -28,6 +28,7 @@ export default function BackNavButton({ to, delta = null, className = "" }) {
     <button
       type="button"
       onPointerDown={onPointerDown}
+      onTouchStart={onPointerDown}
       onClick={onClick}
       className={`backnav-btn ${hiding ? "is-hiding" : ""} ${className}`}
       aria-label="戻る"
